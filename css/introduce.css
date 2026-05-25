@@ -1,0 +1,598 @@
+/* 소개페이지 전체 */
+.introduce-page {
+  width: 100%;
+  background: var(--bg-color);
+  overflow: hidden;
+}
+
+/* 소개 01 제목 영역 */
+.intro-chapter {
+  width: 100%;
+  padding-top: clamp(70px, 6vw, 96px);
+  padding-bottom: clamp(60px, 5vw, 80px);
+  padding-left: clamp(100px, 8vw, 140px);
+  background: var(--bg-color);
+}
+
+/* 01. 글자 */
+.chapter-number {
+  margin: 0 0 24px;
+  font-family: "Pretendard", sans-serif;
+  font-size: clamp(61px, 4.2vw, 72px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--text-color);
+}
+
+/* 01 제목 */
+.chapter-title {
+  margin: 0;
+  font-family: "Pretendard", sans-serif;
+  font-size: clamp(49px, 3.4vw, 60px);
+  font-weight: 700;
+  line-height: 1.22;
+  letter-spacing: -0.04em;
+  color: var(--text-color);
+}
+
+/* 필름 이미지 영역 */
+.film-section {
+  width: 100%;
+  overflow: hidden;
+  background: var(--bg-color);
+}
+
+.film-marquee {
+  width: 100%;
+  overflow: hidden;
+  background: #2f2f2f;
+}
+
+/* 필름 이미지 속도 조절 */
+.film-track {
+  display: flex;
+  width: max-content;
+  animation: filmRoll 20s linear infinite;
+}
+
+.film-img {
+  width: 1200px;
+  height: auto;
+  display: block;
+  flex-shrink: 0;
+}
+
+@keyframes filmRoll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-2400px);
+  }
+}
+
+/* 격자 배경 전체 구간 */
+.grid-area {
+  width: 100%;
+  overflow: hidden;
+
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(#d9d9d9 1px, transparent 1px),
+    linear-gradient(90deg, #d9d9d9 1px, transparent 1px);
+  background-size: clamp(60px, 5vw, 80px) clamp(60px, 5vw, 80px);
+}
+
+/* 본문내용 카드 시작 */
+.chapter-one-body {
+  position: relative;
+  width: 100%;
+  min-height: clamp(760px, 62vw, 980px);
+  padding-top: clamp(90px, 7.5vw, 120px);
+  padding-bottom: clamp(160px, 12vw, 220px);
+
+  background: transparent;
+  overflow: hidden;
+}
+
+/* 공통 카드 스타일 */
+.body-card {
+  position: absolute;
+  left: 50%;
+
+  width: clamp(520px, 40vw, 620px);
+  padding: clamp(24px, 2vw, 32px) clamp(28px, 2.3vw, 37px);
+
+  background: #ffffff;
+  border: 3px solid #222222;
+  box-shadow: 9px 9px 0 #333333;
+
+  font-family: "Pretendard", sans-serif;
+  font-size: clamp(16px, 1.1vw, 18px);
+  font-weight: 600;
+  line-height: 1.5;
+  color: #111111;
+}
+
+.body-card p {
+  margin: 0;
+}
+
+/* 카드1 위에 제목카드 */
+.body-card-label {
+  position: absolute;
+  left: -3px;
+  top: -36px;
+
+  display: inline-block;
+  padding: 7px 14px;
+
+  background: #2f2f2f;
+  color: #ffffff;
+
+  font-family: "Pretendard", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.body-card-1 {
+  top: clamp(100px, 8.3vw, 133px);
+  transform: translateX(calc(-50% - clamp(180px, 18vw, 260px)));
+}
+
+/* WHY+카드2 묶음 */
+.why-block {
+  position: absolute;
+  left: 50%;
+  top: clamp(280px, 23.3vw, 373px);
+  width: clamp(560px, 42vw, 660px);
+  transform: translateX(calc(-50% + clamp(180px, 18vw, 260px)));
+}
+
+.why-title {
+  position: absolute;
+  right: 0;
+  top: -76px;
+
+  margin: 0;
+  font-family: "Pretendard", sans-serif;
+  font-size: clamp(70px, 5.2vw, 84px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: #333333;
+}
+
+.body-card-2 {
+  position: relative;
+  left: auto;
+  width: clamp(560px, 42vw, 660px);
+  transform: none;
+}
+
+.body-card-3 {
+  top: clamp(480px, 40vw, 640px);
+  transform: translateX(calc(-50% - clamp(180px, 18vw, 260px)));
+}
+
+/* 폴라로이드 3장 사진 파트 */
+.photo-scatter-section {
+  width: 100%;
+  padding: clamp(80px, 7vw, 120px) 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+.photo-scatter-stage {
+  position: relative;
+  width: clamp(900px, 78vw, 1220px);
+  height: clamp(720px, 58vw, 920px);
+  margin: 0 auto;
+}
+
+/* 공통 사진 스타일 */
+.scatter-photo {
+  position: absolute;
+  display: block;
+  height: auto;
+
+  opacity: 0;
+  filter: drop-shadow(8px 10px 8px rgba(0, 0, 0, 0.22));
+
+  will-change: transform, opacity;
+  transition:
+    opacity 0.65s ease,
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 사진 1 */
+.photo-1 {
+  width: clamp(300px, 26vw, 410px);
+  left: 58%;
+  top: 16%;
+
+  --rotate: 16deg;
+  --tx: -50%;
+  --ty: -50%;
+
+  transform: translate(var(--tx), calc(var(--ty) + 70px)) rotate(var(--rotate));
+  transition-delay: 0.05s;
+}
+
+/* 사진 2 */
+.photo-2 {
+  width: clamp(320px, 28vw, 440px);
+  left: 36%;
+  top: 55%;
+
+  --rotate: -9deg;
+  --tx: -50%;
+  --ty: -50%;
+
+  transform: translate(var(--tx), calc(var(--ty) + 70px)) rotate(var(--rotate));
+  transition-delay: 0.2s;
+}
+
+/* 사진 3 */
+.photo-3 {
+  width: clamp(310px, 27vw, 430px);
+  left: 58%;
+  top: 73%;
+
+  --rotate: 3deg;
+  --tx: -50%;
+  --ty: -50%;
+
+  transform: translate(var(--tx), calc(var(--ty) + 70px)) rotate(var(--rotate));
+  transition-delay: 0.35s;
+}
+
+/* 섹션이 보일 때 사진 등장 */
+.photo-scatter-section.is-visible .photo-1,
+.photo-scatter-section.is-visible .photo-2,
+.photo-scatter-section.is-visible .photo-3 {
+  opacity: 1;
+  transform: translate(var(--tx), var(--ty)) rotate(var(--rotate));
+}
+
+/* 챕터 02 시작 */
+.chapter-two {
+  width: 100%;
+  padding-top: clamp(80px, 7vw, 112px);
+  padding-bottom: clamp(60px, 8vw, 98px);
+
+  background: transparent;
+}
+
+.chapter-two-text {
+  text-align: center;
+  margin-bottom: clamp(70px, 6vw, 96px);
+}
+
+.chapter-two-number {
+  margin: 0 0 clamp(18px, 1.5vw, 24px);
+
+  font-family: "Pretendard", sans-serif;
+  font-size: clamp(61px, 4.2vw, 72px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: #000000;
+}
+
+.chapter-two-title {
+  margin: 0 0 clamp(24px, 2vw, 32px);
+
+  font-family: "Pretendard", sans-serif;
+  font-size: clamp(49px, 3.4vw, 60px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+  color: #000000;
+}
+
+.chapter-two-desc {
+  margin: 0;
+
+  font-family: "Pretendard", sans-serif;
+  font-size: clamp(16px, 1.15vw, 19px);
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -0.02em;
+  color: #000000;
+}
+
+.chapter-two-map-wrap {
+  width: clamp(960px, 76vw, 1220px);
+  margin: 0 auto;
+}
+
+.chapter-two-map {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 구역별 슬라이드 영역 */
+.district-carousel-section {
+  position: relative;
+  width: 100%;
+  padding: clamp(40px, 6vw, 66px) 0 clamp(90px, 7vw, 120px);
+}
+
+/* 이미지 + 텍스트 묶음 */
+.district-carousel {
+  width: clamp(780px, 68vw, 1040px);
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(32px, 4vw, 56px);
+}
+
+/* 지도 이미지 */
+.district-image-wrap {
+  width: clamp(430px, 38vw, 610px);
+  flex-shrink: 0;
+}
+
+.district-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 텍스트 영역 */
+.district-text {
+  width: clamp(420px, 34vw, 560px);
+  font-family: "Pretendard", sans-serif;
+  color: #000000;
+}
+
+.district-chapter {
+  display: inline-block;
+  margin-bottom: clamp(12px, 1vw, 16px);
+  padding: 4px 8px;
+
+  background: #333333;
+  color: #ffffff;
+
+  font-size: clamp(14px, 1vw, 16px);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.district-title {
+  margin: 0 0 clamp(18px, 1.5vw, 24px);
+
+  font-size: clamp(36px, 3vw, 48px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+}
+
+.district-desc {
+  margin: 0;
+
+  font-size: clamp(16px, 1.1vw, 18px);
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -0.03em;
+}
+
+/* 좌우 화살표 */
+.carousel-arrow {
+  position: absolute;
+  top: 42%;
+  transform: translateY(-50%);
+
+  width: clamp(44px, 4vw, 60px);
+  height: clamp(44px, 4vw, 60px);
+
+  border: none;
+  background: transparent;
+  color: #000000;
+
+  font-size: clamp(64px, 5vw, 82px);
+  font-weight: 400;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.carousel-prev {
+  left: clamp(60px, 6vw, 100px);
+}
+
+.carousel-next {
+  right: clamp(60px, 6vw, 100px);
+}
+
+/* 점 표시 */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(12px, 1vw, 16px);
+
+  margin-top: clamp(56px, 3vw, 72px);
+}
+
+.carousel-dot {
+  width: clamp(10px, 0.8vw, 13px);
+  height: clamp(10px, 0.8vw, 13px);
+
+  border: none;
+  background: #d9d9d9;
+  cursor: pointer;
+}
+
+.carousel-dot.active {
+  background: #333333;
+}
+
+/* 폴라로이드 3장 사진 파트 */
+.photo-stack-section {
+  width: 100%;
+  padding: clamp(80px, 7vw, 120px) 0 clamp(120px, 9vw, 160px);
+  background: transparent;
+  overflow: hidden;
+}
+
+.photo-stack-stage {
+  position: relative;
+  width: clamp(760px, 62vw, 980px);
+  height: clamp(1450px, 118vw, 1880px);
+  margin: 0 auto;
+}
+
+/* 공통 사진 스타일 */
+.stack-photo {
+  position: absolute;
+  display: block;
+  height: auto;
+
+  opacity: 0;
+  filter: drop-shadow(8px 10px 8px rgba(0, 0, 0, 0.22));
+
+  will-change: transform, opacity;
+  transition:
+    opacity 0.65s ease,
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 섹션이 보이기 전 기본 상태 */
+.stack-photo {
+  transform: translate(var(--tx), calc(var(--ty) + 70px)) rotate(var(--rotate));
+}
+
+/* 섹션이 보일 때 등장 */
+.photo-stack-section.is-visible .stack-photo {
+  opacity: 1;
+  transform: translate(var(--tx), var(--ty)) rotate(var(--rotate));
+}
+
+/* 1번 사진 */
+.stack-photo-1 {
+  width: clamp(300px, 26vw, 420px);
+  left: 52%;
+  top: 8%;
+
+  --tx: -50%;
+  --ty: -50%;
+  --rotate: 15deg;
+
+  transition-delay: 0.05s;
+}
+
+/* 2번 사진 */
+.stack-photo-2 {
+  width: clamp(300px, 26vw, 420px);
+  left: 38%;
+  top: 25%;
+
+  --tx: -50%;
+  --ty: -50%;
+  --rotate: -8deg;
+
+  transition-delay: 0.16s;
+}
+
+/* 3번 사진 */
+.stack-photo-3 {
+  width: clamp(300px, 26vw, 420px);
+  left: 54%;
+  top: 41%;
+
+  --tx: -50%;
+  --ty: -50%;
+  --rotate: 2deg;
+
+  transition-delay: 0.27s;
+}
+
+/* 4번 사진 */
+.stack-photo-4 {
+  width: clamp(300px, 26vw, 420px);
+  left: 55%;
+  top: 57%;
+
+  --tx: -50%;
+  --ty: -50%;
+  --rotate: 14deg;
+
+  transition-delay: 0.38s;
+}
+
+/* 5번 사진 */
+.stack-photo-5 {
+  width: clamp(300px, 26vw, 420px);
+  left: 42%;
+  top: 73%;
+
+  --tx: -50%;
+  --ty: -50%;
+  --rotate: -9deg;
+
+  transition-delay: 0.49s;
+}
+
+/* 6번 사진 */
+.stack-photo-6 {
+  width: clamp(300px, 26vw, 420px);
+  left: 53%;
+  top: 89%;
+
+  --tx: -50%;
+  --ty: -50%;
+  --rotate: 3deg;
+
+  transition-delay: 0.6s;
+}
+
+/* 마지막 */
+.intro-footer {
+  width: 100%;
+  min-height: clamp(260px, 22vw, 360px);
+  padding: clamp(60px, 5vw, 80px) clamp(100px, 8vw, 140px);
+
+  display: grid;
+  grid-template-columns: 2.2fr 1fr 1fr 1.4fr;
+  column-gap: clamp(60px, 6vw, 100px);
+
+  background: #ffffff;
+  color: #111111;
+
+  font-family: "Pretendard", sans-serif;
+}
+
+.footer-logo {
+  font-size: clamp(18px, 1.3vw, 22px);
+  font-weight: 800;
+  line-height: 1.4;
+  letter-spacing: -0.03em;
+}
+
+.footer-column h3 {
+  margin: 0 0 clamp(18px, 1.5vw, 24px);
+
+  font-size: clamp(18px, 1.3vw, 22px);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.footer-column p {
+  margin: 0 0 clamp(12px, 1vw, 16px);
+
+  font-size: clamp(16px, 1.15vw, 19px);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.03em;
+}
+
+.footer-about p {
+  white-space: nowrap;
+}

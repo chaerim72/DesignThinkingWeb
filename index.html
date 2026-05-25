@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="./css/common.css" />
+    <link rel="stylesheet" href="./css/introduce.css" />
+  </head>
+
+  <body>
+    <main class="introduce-page">
+      <!-- 소개 01 시작 -->
+      <section class="intro-chapter">
+        <p class="chapter-number">01.</p>
+        <h1 class="chapter-title">
+          우리는 왜 안서동 바닥을<br />
+          뒤지기 시작했나
+        </h1>
+      </section>
+
+      <!-- 필름 이미지 파트 -->
+      <section class="film-section">
+        <div class="film-marquee">
+          <div class="film-track">
+            <img
+              src="./assets/images/film01.png"
+              alt="필름 이미지 1"
+              class="film-img"
+            />
+            <img
+              src="./assets/images/film02.png"
+              alt="필름 이미지 2"
+              class="film-img"
+            />
+
+            <!-- 반복용 복제 이미지 -->
+            <img
+              src="./assets/images/film01.png"
+              alt=""
+              class="film-img"
+              aria-hidden="true"
+            />
+            <img
+              src="./assets/images/film02.png"
+              alt=""
+              class="film-img"
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- 격자 배경 시작 -->
+      <div class="grid-area">
+        <!-- 본문내용 카드 시작 -->
+        <section class="chapter-one-body">
+          <div class="body-card body-card-1">
+            <span class="body-card-label">안서동 쓰레기 줍기 프로젝트</span>
+            <p>
+              우리는 매일 안서동을 걷지만, 발밑의 세계를 읽지는 않는다. 5개의
+              대학이 밀집한 안서동의 쓰레기는 이곳을 향유하는 학생들의
+              라이프스타일과 시간의 흐름을 가장 솔직하게 담아내는 매개체다.
+            </p>
+          </div>
+
+          <div class="why-block">
+            <h2 class="why-title">WHY?</h2>
+
+            <div class="body-card body-card-2">
+              <p>
+                이를 위해 안서동을 5구역으로 나누어 현장을 조사하고 공간별
+                쓰레기 분포를 추적했다. 채집된 폐기물들은 시각적 데이터로
+                박제되어, 안서동의 지리적 특성을 증명하는 새로운 기록물로서의
+                가치를 갖게 된다.
+              </p>
+            </div>
+          </div>
+
+          <div class="body-card body-card-3">
+            <p>
+              우리가 안서동의 구석구석을 뒤지기 시작한 이유는 단순히 오물을
+              기록하는 것을 넘어, 그 속에 숨겨진 조형적 패턴을 통해 안서동만의
+              지역적 정체성을 재발견하고 싶었기 때문이다.
+            </p>
+          </div>
+        </section>
+
+        <!-- 폴라로이드사진 3장 -->
+        <section class="photo-scatter-section">
+          <div class="photo-scatter-stage">
+            <img
+              src="./assets/images/photo01.png"
+              alt="안서동 쓰레기 사진 1"
+              class="scatter-photo photo-1"
+            />
+
+            <img
+              src="./assets/images/photo02.png"
+              alt="안서동 쓰레기 사진 2"
+              class="scatter-photo photo-2"
+            />
+
+            <img
+              src="./assets/images/photo03.png"
+              alt="안서동 쓰레기 사진 3"
+              class="scatter-photo photo-3"
+            />
+          </div>
+        </section>
+
+        <!-- 챕터 02 시작 -->
+        <section class="chapter-two">
+          <div class="chapter-two-text">
+            <p class="chapter-two-number">02.</p>
+
+            <h2 class="chapter-two-title">5구역으로 나눈 안서동</h2>
+
+            <p class="chapter-two-desc">
+              우리는 안서동의 지역적 정체성을 정밀하게 들여다보기 위해,<br />
+              학생들의 발길이 가장 밀도 높게 머무르는 5개의 핵심 구역을
+              선정했다.
+            </p>
+          </div>
+
+          <div class="chapter-two-map-wrap">
+            <img
+              src="./assets/images/anseo-trash-map예시.png"
+              alt="안서동 전체 쓰레기 지도"
+              class="chapter-two-map"
+            />
+          </div>
+        </section>
+
+        <!-- 각지역 파트 넘기기 -->
+        <section class="district-carousel-section">
+          <button
+            class="carousel-arrow carousel-prev"
+            type="button"
+            aria-label="이전 구역"
+          >
+            ‹
+          </button>
+
+          <div class="district-carousel">
+            <div class="district-image-wrap">
+              <img
+                src="./assets/images/sangmyung-map예시.png"
+                alt="상명대 상가 지도"
+                class="district-image"
+                id="districtImage"
+              />
+            </div>
+
+            <div class="district-text">
+              <span class="district-chapter" id="districtChapter"
+                >Chapter 1</span
+              >
+              <h3 class="district-title" id="districtTitle">상명대 상가</h3>
+              <p class="district-desc" id="districtDesc">
+                가파른 경사를 따라 형성된 독특한 지형만큼이나, 그 상권을
+                이용하는 이들의 개성 있는 라이프스타일이 고스란히 묻어나는
+                파편들을 채집했다.
+              </p>
+            </div>
+          </div>
+
+          <button
+            class="carousel-arrow carousel-next"
+            type="button"
+            aria-label="다음 구역"
+          >
+            ›
+          </button>
+
+          <div class="carousel-dots" id="carouselDots"></div>
+        </section>
+
+        <!-- 폴라로이드사진 6장 -->
+        <section class="photo-stack-section scroll-photo-section">
+          <div class="photo-stack-stage">
+            <img
+              src="./assets/images/photo01.png"
+              alt="안서동 쓰레기 사진 1"
+              class="stack-photo stack-photo-1"
+            />
+
+            <img
+              src="./assets/images/photo02.png"
+              alt="안서동 쓰레기 사진 2"
+              class="stack-photo stack-photo-2"
+            />
+
+            <img
+              src="./assets/images/photo03.png"
+              alt="안서동 쓰레기 사진 3"
+              class="stack-photo stack-photo-3"
+            />
+
+            <img
+              src="./assets/images/photo01.png"
+              alt="안서동 쓰레기 사진 4"
+              class="stack-photo stack-photo-4"
+            />
+
+            <img
+              src="./assets/images/photo02.png"
+              alt="안서동 쓰레기 사진 5"
+              class="stack-photo stack-photo-5"
+            />
+
+            <img
+              src="./assets/images/photo03.png"
+              alt="안서동 쓰레기 사진 6"
+              class="stack-photo stack-photo-6"
+            />
+          </div>
+        </section>
+      </div>
+
+      <!-- 마지막 -->
+      <footer class="intro-footer">
+        <div class="footer-logo">ANSEO-DONG TRASH ARCHIVE</div>
+
+        <div class="footer-column">
+          <h3>MEMBER</h3>
+          <p>박세연</p>
+          <p>송혜진</p>
+          <p>이은별</p>
+          <p>한채림</p>
+        </div>
+
+        <div class="footer-column">
+          <h3>CONTACT</h3>
+          <p>soohyun@email.com</p>
+          <p>chaeyeon@email.com</p>
+          <p>member@email.com</p>
+          <p>2arra@gmail.com</p>
+        </div>
+
+        <div class="footer-column footer-about">
+          <h3>ABOUT</h3>
+          <p>Survey : 2025.09 — 2026.03</p>
+          <p>Dataset : 159 Photographs</p>
+          <p>© 2026. All Rights Reserved.</p>
+        </div>
+      </footer>
+    </main>
+
+    <script src="./js/introduce.js"></script>
+  </body>
+</html>

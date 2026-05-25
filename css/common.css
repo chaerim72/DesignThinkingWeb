@@ -1,0 +1,27 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --sub-bg-color: #2f2f2f;
+  --card-bg-color: #ffffff;
+  --card-border-color: #222222;
+}
+
+body.dark-mode {
+  --bg-color: #111111;
+  --text-color: #ffffff;
+  --sub-bg-color: #000000;
+  --card-bg-color: #1e1e1e;
+  --card-border-color: #ffffff;
+}
