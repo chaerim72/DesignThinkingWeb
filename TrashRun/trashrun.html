@@ -56,18 +56,27 @@
     </nav>
 
     <main class="trashrun-page">
-      <section class="run-game-wrap">
-        <div class="run-ui">
-          <span>LV: <strong id="runLevel">1</strong></span>
-          <span>SCORE: <strong id="runScore">0</strong></span>
-          <span>LIFE: <strong id="runLife">3</strong></span>
+      <button class="arrow-btn">&lt;</button>
+
+      <div class="game-container">
+        <div class="game-title">Game 2: 집 가는 길 왜 이래?</div>
+
+        <canvas id="gameCanvas" width="1000" height="500"></canvas>
+
+        <div class="instructions">
+          스페이스바를 길게 누르면 고공 점프, 짧게 누르면 소형 점프가
+          가능합니다. 다시 시작은 Enter.
         </div>
+      </div>
 
-        <canvas id="runCanvas" width="800" height="420"></canvas>
-
-        <p class="run-guide">SPACE 또는 클릭으로 점프</p>
-      </section>
+      <button class="arrow-btn">&gt;</button>
     </main>
+
+    <div class="dots-container">
+      <div class="dot"></div>
+      <div class="dot active"></div>
+      <div class="dot"></div>
+    </div>
 
     <script src="./trashrun.js"></script>
   </body>
