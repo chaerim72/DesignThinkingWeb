@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>쓰레기 쌓기</title>
+
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+
+    <link rel="stylesheet" href="../css/common.css" />
+    <link rel="stylesheet" href="./trashup.css" />
+  </head>
+
+  <body>
+    <nav class="navbar">
+      <div class="nav-left">
+        <a href="../index.html" class="logo">
+          <img
+            src="../assets/images/바나나.png"
+            alt="Banana Logo"
+            class="logo-img"
+          />
+        </a>
+      </div>
+
+      <div class="nav-center">
+        <div class="nav-menu">
+          <a href="../index.html#intro-start" class="nav-item">
+            <span class="item-text">소개</span>
+          </a>
+          <a href="../TrashCatch/trashcatch.html" class="nav-item">
+            <span class="item-text">쓰레기 담기</span>
+          </a>
+          <a href="../TrashRun/trashrun.html" class="nav-item">
+            <span class="item-text">쓰레기 런</span>
+          </a>
+          <a href="./trashup.html" class="nav-item active">
+            <span class="item-text">쓰레기 쌓기</span>
+          </a>
+          <a href="../Setting/setting.html" class="nav-item">
+            <span class="item-text">설정</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-right"></div>
+    </nav>
+
+    <div id="image-preload-cache" style="display: none">
+      <img id="img-tissue" src="../assets/images/trashup/tissue.png" />
+      <img id="img-chopsticks" src="../assets/images/trashup/chopsticks.png" />
+      <img id="img-butt" src="../assets/images/trashup/cigarette.png" />
+      <img id="img-card" src="../assets/images/trashup/card.jpg" />
+      <img id="img-snack" src="../assets/images/trashup/snack.jpg" />
+      <img id="img-bacchus" src="../assets/images/trashup/bacchus.png" />
+      <img id="img-welchs" src="../assets/images/trashup/welchs.png" />
+      <img id="img-coffee" src="../assets/images/trashup/coffee.png" />
+    </div>
+
+    <main class="trashup-page">
+      <div class="nav-arrow">&lt;</div>
+
+      <div class="game-wrapper">
+        <div class="game-title">Game 3 : 분리수거 실패 현장</div>
+
+        <div id="game-container">
+          <div id="hud" style="display: none">
+            <div class="score-box" id="score-text">Score: 000000</div>
+            <div class="controls">
+              <span>🔊</span>
+              <span id="pause-btn">⏸</span>
+            </div>
+          </div>
+
+          <div id="start-screen" class="ui-panel">
+            <h1>일단 올려</h1>
+            <p id="loading-text">쓰레기 사진 로딩 중... (0/8)</p>
+            <button class="btn" id="start-btn">Start</button>
+          </div>
+
+          <div id="pause-screen" class="ui-panel">
+            <h1>일시정지</h1>
+            <button class="btn" id="resume-btn">계속하기</button>
+          </div>
+
+          <div id="game-over-screen" class="ui-panel">
+            <h1>게임 종료</h1>
+            <p id="final-score">Score: 000000</p>
+            <button class="btn" id="restart-btn">다시하기 ↻</button>
+          </div>
+
+          <canvas id="gameCanvas" width="450" height="650"></canvas>
+        </div>
+
+        <div class="pagination">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot active"></div>
+        </div>
+      </div>
+
+      <div class="nav-arrow">&gt;</div>
+    </main>
+
+    <script src="./trashup.js"></script>
+  </body>
+</html>
