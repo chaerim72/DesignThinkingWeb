@@ -3,15 +3,64 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Design Thinking Web</title>
+
+    <!-- Pretendard 링크 -->
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
 
     <link rel="stylesheet" href="./css/common.css" />
     <link rel="stylesheet" href="./css/introduce.css" />
   </head>
 
   <body>
+    <!-- 메뉴바 -->
+    <nav class="navbar">
+      <div class="nav-left">
+        <a href="./index.html" class="logo">
+          <img
+            src="./assets/images/바나나.png"
+            alt="Banana Logo"
+            class="logo-img"
+          />
+        </a>
+      </div>
+
+      <div class="nav-center">
+        <div class="nav-menu">
+          <a href="#intro-start" class="nav-item active"
+            ><span class="item-text">소개</span></a
+          >
+          <a href="./TrashCatch/trashcatch.html" class="nav-item"
+            ><span class="item-text">쓰레기 담기</span></a
+          >
+          <a href="./TrashRun/trashrun.html" class="nav-item"
+            ><span class="item-text">쓰레기 런</span></a
+          >
+          <a href="./TrashUp/trashup.html" class="nav-item"
+            ><span class="item-text">쓰레기 쌓기</span></a
+          >
+          <a href="./Setting/setting.html" class="nav-item"
+            ><span class="item-text">설정</span></a
+          >
+        </div>
+      </div>
+
+      <div class="nav-right"></div>
+    </nav>
+
+    <!-- 로고 파티클 -->
+    <section class="particle-section">
+      <canvas id="particleCanvas"></canvas>
+    </section>
+
     <main class="introduce-page">
       <!-- 소개 01 시작 -->
-      <section class="intro-chapter">
+      <section class="intro-chapter" id="intro-start">
         <p class="chapter-number">01.</p>
         <h1 class="chapter-title">
           우리는 왜 안서동 바닥을<br />
@@ -247,6 +296,7 @@
       </footer>
     </main>
 
+    <script src="./js/particle.js"></script>
     <script src="./js/introduce.js"></script>
   </body>
 </html>

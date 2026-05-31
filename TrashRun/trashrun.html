@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>쓰레기 런</title>
+
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+
+    <link rel="stylesheet" href="../css/common.css" />
+    <link rel="stylesheet" href="./trashrun.css" />
+  </head>
+
+  <body>
+    <nav class="navbar">
+      <div class="nav-left">
+        <a href="../index.html" class="logo">
+          <img
+            src="../assets/images/바나나.png"
+            alt="Banana Logo"
+            class="logo-img"
+          />
+        </a>
+      </div>
+
+      <div class="nav-center">
+        <div class="nav-menu">
+          <a href="../index.html#intro-start" class="nav-item">
+            <span class="item-text">소개</span>
+          </a>
+
+          <a href="../TrashCatch/trashcatch.html" class="nav-item">
+            <span class="item-text">쓰레기 담기</span>
+          </a>
+
+          <a href="./trashrun.html" class="nav-item active">
+            <span class="item-text">쓰레기 런</span>
+          </a>
+
+          <a href="../TrashUp/trashup.html" class="nav-item">
+            <span class="item-text">쓰레기 쌓기</span>
+          </a>
+
+          <a href="../Setting/setting.html" class="nav-item">
+            <span class="item-text">설정</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-right"></div>
+    </nav>
+
+    <main class="trashrun-page">
+      <section class="run-game-wrap">
+        <div class="run-ui">
+          <span>LV: <strong id="runLevel">1</strong></span>
+          <span>SCORE: <strong id="runScore">0</strong></span>
+          <span>LIFE: <strong id="runLife">3</strong></span>
+        </div>
+
+        <canvas id="runCanvas" width="800" height="420"></canvas>
+
+        <p class="run-guide">SPACE 또는 클릭으로 점프</p>
+      </section>
+    </main>
+
+    <script src="./trashrun.js"></script>
+  </body>
+</html>
