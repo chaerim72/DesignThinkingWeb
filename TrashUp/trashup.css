@@ -1,5 +1,6 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css");
 
+/* 다크모드할거면 다른곳도 이런식으로 색 지정해줘야함. */
 :root {
   --bg-color: #ffffff;
   --text-color: #000000;
@@ -30,7 +31,7 @@ body {
 }
 
 .trashup-page .game-title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   margin-bottom: 10px;
   color: #111111;
@@ -43,7 +44,7 @@ body {
   height: 650px !important;
 
   background-color: #ffffff;
-  border: 1px solid #999999;
+  border: 2px solid #a0a0a0;
   overflow: hidden;
 
   background-image:
