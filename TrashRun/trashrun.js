@@ -165,6 +165,7 @@ class Obstacle {
 }
 
 function drawUI() {
+  // 스코어박스
   ctx.strokeStyle = "#7f7f7f";
   ctx.lineWidth = 2;
   ctx.beginPath();
@@ -172,19 +173,26 @@ function drawUI() {
   ctx.lineTo(canvas.width, 420);
   ctx.stroke();
 
-  ctx.fillStyle = "#f0f0f0";
-  ctx.fillRect(0, 421, canvas.width, canvas.height - 421);
+  const scoreBoxWidth = 140;
+  const scoreBoxHeight = 32;
+  const scoreBoxX = canvas.width / 2 - scoreBoxWidth / 2;
+  const scoreBoxY = 25;
 
   ctx.fillStyle = "#e8e8e8";
-  ctx.fillRect(440, 25, 120, 32);
+  ctx.fillRect(scoreBoxX, scoreBoxY, scoreBoxWidth, scoreBoxHeight);
+
   ctx.strokeStyle = "#7f7f7f";
-  ctx.strokeRect(440, 25, 120, 32);
+  ctx.strokeRect(scoreBoxX, scoreBoxY, scoreBoxWidth, scoreBoxHeight);
 
   ctx.fillStyle = "#000000";
-  ctx.font = 'bold 15px "Courier New", monospace';
+  ctx.font = '700 15px "Pretendard", sans-serif';
   ctx.textAlign = "center";
   let paddedScore = String(Math.floor(score)).padStart(6, "0");
-  ctx.fillText(`Score: ${paddedScore}`, 500, 46);
+  ctx.fillText(`Score: ${paddedScore}`, canvas.width / 2, scoreBoxY + 21);
+
+  // 바닥
+  ctx.fillStyle = "#f0f0f0";
+  ctx.fillRect(0, 421, canvas.width, canvas.height - 421);
 
   ctx.fillStyle = "#4a4a4a";
   ctx.font = "16px sans-serif";
@@ -198,7 +206,7 @@ function drawUI() {
     ctx.font = "bold 18px sans-serif";
     ctx.textAlign = "center";
     ctx.fillText(
-      "SPACEBAR를 누르면 런을 시작합니다.",
+      "SpaceBar 를 누르면 게임을 시작합니다.",
       canvas.width / 2,
       canvas.height / 2,
     );
@@ -206,10 +214,16 @@ function drawUI() {
     ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    const boxWidth = 240;
+    const boxHeight = 80;
+    const boxX = canvas.width / 2 - boxWidth / 2;
+    const boxY = canvas.height / 2 - boxHeight / 2;
+
     ctx.fillStyle = "#000000";
-    ctx.fillRect(380, 210, 240, 80);
+    ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+
     ctx.strokeStyle = "#ffffff";
-    ctx.strokeRect(385, 215, 230, 70);
+    ctx.strokeRect(boxX + 5, boxY + 5, boxWidth - 10, boxHeight - 10);
 
     ctx.fillStyle = "#ffffff";
     ctx.font = "bold 18px sans-serif";

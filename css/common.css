@@ -8,7 +8,9 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
+  min-width: 1200px;
   font-family: "Pretendard", sans-serif;
+  overflow-x: auto;
 }
 
 /* 공통 상단 메뉴바 */
@@ -25,7 +27,7 @@ body {
   box-sizing: border-box;
 
   z-index: 1000;
-  background: transparent;
+  background: #ffffff;
   border-bottom: none;
 }
 

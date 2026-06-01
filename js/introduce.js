@@ -127,3 +127,36 @@ const photoObserver = new IntersectionObserver(
 scrollPhotoSections.forEach((section) => {
   photoObserver.observe(section);
 });
+
+// 첫화면에서 조금만스크롤해도 소개부분으로
+let isAtParticleTop = true;
+let isScrollMoving = false;
+
+window.addEventListener(
+  "wheel",
+  (event) => {
+    if (isScrollMoving) return;
+
+    const currentScrollTop =
+      window.pageYOffset || document.documentElement.scrollTop;
+
+    const introStart = document.getElementById("intro-start");
+
+    if (!introStart) return;
+
+    if (currentScrollTop < 10 && event.deltaY > 0) {
+      isScrollMoving = true;
+      isAtParticleTop = false;
+
+      introStart.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+
+      setTimeout(() => {
+        isScrollMoving = false;
+      }, 900);
+    }
+  },
+  { passive: true },
+);

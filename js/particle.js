@@ -1,16 +1,9 @@
 // 바나나 로고 파티클 전용 코드
-
 const canvas = document.getElementById("particleCanvas");
 const ctx = canvas.getContext("2d");
 
-function resizeCanvas() {
-  const rect = canvas.getBoundingClientRect();
-
-  canvas.width = rect.width;
-  canvas.height = rect.height;
-}
-
-resizeCanvas();
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 let particleArray = [];
 
@@ -34,20 +27,15 @@ const imageList = ["./assets/images/바나나.png"];
 const randomImageName = imageList[Math.floor(Math.random() * imageList.length)];
 
 window.addEventListener("mousemove", (event) => {
-  const rect = canvas.getBoundingClientRect();
-
-  const canvasMouseX = event.clientX - rect.left;
-  const canvasMouseY = event.clientY - rect.top;
-
   if (mouse.lastX !== null && mouse.lastY !== null) {
-    mouse.vx = canvasMouseX - mouse.lastX;
-    mouse.vy = canvasMouseY - mouse.lastY;
+    mouse.vx = event.clientX - mouse.lastX;
+    mouse.vy = event.clientY - mouse.lastY;
   }
 
-  mouse.x = canvasMouseX;
-  mouse.y = canvasMouseY;
-  mouse.lastX = canvasMouseX;
-  mouse.lastY = canvasMouseY;
+  mouse.x = event.clientX;
+  mouse.y = event.clientY;
+  mouse.lastX = event.clientX;
+  mouse.lastY = event.clientY;
 
   if (easedMouse.x === null) easedMouse.x = mouse.x;
   if (easedMouse.y === null) easedMouse.y = mouse.y;
@@ -78,11 +66,11 @@ class Particle {
     const layerRand = Math.random();
 
     if (layerRand < 0.3) {
-      this.size = 3.3;
+      this.size = 3.5;
       this.friction = 0.84;
       this.returnSpeed = 0.035;
     } else if (layerRand < 0.7) {
-      this.size = 3;
+      this.size = 3.0;
       this.friction = 0.85;
       this.returnSpeed = 0.022;
     } else {
@@ -170,14 +158,14 @@ let centerX = 0;
 let centerY = 0;
 
 /* 로고 크기 조절 */
-let baseScaleX = 1.38;
-let baseScaleY = 1.4;
+let baseScale = 1.9;
+let particleOffsetY = 30;
 
 function initMainParticles(image) {
   particleArray = [];
 
-  const scaledWidth = image.width * baseScaleX;
-  const scaledHeight = image.height * baseScaleY;
+  const scaledWidth = image.width * baseScale;
+  const scaledHeight = image.height * baseScale;
 
   const tempCanvas = document.createElement("canvas");
   const tempCtx = tempCanvas.getContext("2d");
@@ -190,7 +178,7 @@ function initMainParticles(image) {
   const pixels = tempCtx.getImageData(0, 0, scaledWidth, scaledHeight);
 
   centerX = (canvas.width - scaledWidth) / 2;
-  centerY = (canvas.height - scaledHeight) / 2;
+  centerY = (canvas.height - scaledHeight) / 2 + particleOffsetY;
 
   const gap = 2;
 
@@ -234,7 +222,7 @@ window.addEventListener("resize", () => {
     const p = particleArray[i];
 
     const targetX = newCanvasCenterX + p.relX;
-    const targetY = newCanvasCenterY + p.relY;
+    const targetY = newCanvasCenterY + p.relY + particleOffsetY;
 
     p.originX = targetX;
     p.originY = targetY;

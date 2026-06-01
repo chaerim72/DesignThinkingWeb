@@ -2,37 +2,46 @@ html {
   scroll-behavior: smooth;
 }
 
-/* 로고파티클 */
-.particle-section {
-  position: relative;
-  width: 100%;
-  height: calc(100vh - 105px);
-  margin-top: 105px;
-  padding-top: 0;
-  background: #ffffff;
-  overflow: hidden;
-}
-
+/* 바나나 파일 방식: 파티클을 화면 뒤에 고정 */
 #particleCanvas {
-  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+
   width: 100%;
   height: 100%;
+
+  display: block;
+
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* 소개페이지 전체 */
 .introduce-page {
+  position: relative;
+
+  margin-top: 100vh;
   width: 100%;
-  background: var(--bg-color);
-  overflow: hidden;
+
+  background: #ffffff;
+  z-index: 2;
+
+  border-top: 3.5px solid #000000;
+  overflow: visible !important;
 }
 
 /* 소개 01 제목 영역 */
 .intro-chapter {
+  position: relative;
+  z-index: 2;
+
   width: 100%;
   padding-top: clamp(120px, 10vw, 150px);
   padding-bottom: clamp(60px, 5vw, 80px);
   padding-left: clamp(100px, 8vw, 140px);
-  background: var(--bg-color);
+
+  background: #ffffff;
 }
 
 /* 01. 글자 */
@@ -327,7 +336,7 @@ html {
 }
 
 .chapter-two-map-wrap {
-  width: clamp(960px, 76vw, 1220px);
+  width: clamp(900px, 76vw, 1020px);
   margin: 0 auto;
 }
 
@@ -341,7 +350,7 @@ html {
 .district-carousel-section {
   position: relative;
   width: 100%;
-  padding: clamp(40px, 6vw, 66px) 0 clamp(90px, 7vw, 120px);
+  padding: clamp(40px, 6vw, 50px) 0 clamp(90px, 7vw, 120px);
 }
 
 /* 이미지 + 텍스트 묶음 */
@@ -574,7 +583,103 @@ html {
   transition-delay: 0.6s;
 }
 
-/* 마지막 */
+/* 아웃트로 섹션 */
+.outro-section {
+  width: 100%;
+  min-height: clamp(760px, 78vw, 980px);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: clamp(100px, 9vw, 140px) clamp(100px, 8vw, 140px);
+
+  background: transparent;
+  text-align: center;
+
+  font-family: "Pretendard", sans-serif;
+  color: #111111;
+}
+
+/* 위아래 점 */
+.outro-dots {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.outro-dots span {
+  width: 8px;
+  height: 8px;
+  background: #333333;
+  display: block;
+}
+
+.outro-dots-top {
+  margin-bottom: clamp(130px, 11vw, 170px);
+}
+
+.outro-dots-bottom {
+  margin-top: clamp(80px, 7vw, 110px);
+  margin-bottom: clamp(130px, 10vw, 160px);
+}
+
+/* 아웃트로 제목 */
+.outro-title {
+  margin: 0 0 clamp(22px, 2vw, 30px);
+
+  font-size: clamp(18px, 1.35vw, 22px);
+  font-weight: 800;
+  line-height: 1.5;
+  letter-spacing: -0.04em;
+}
+
+/* 아웃트로 본문 */
+.outro-desc {
+  width: clamp(760px, 66vw, 1050px);
+  margin: 0;
+
+  font-size: clamp(17px, 1.25vw, 21px);
+  font-weight: 700;
+  line-height: 1.65;
+  letter-spacing: -0.04em;
+  word-break: keep-all;
+}
+
+/* 게임 버튼 */
+.outro-game-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: clamp(10px, 1vw, 14px) clamp(18px, 2vw, 28px);
+
+  border: 3px solid #111111;
+  background: #ffffff;
+
+  color: #111111;
+  text-decoration: none;
+
+  font-size: clamp(22px, 1.9vw, 30px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+
+  box-shadow: 4px 4px 0 #111111;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.outro-game-button:hover {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 #111111;
+}
+
+/* 크레딧 */
 .intro-footer {
   width: 100%;
   min-height: clamp(260px, 22vw, 360px);
