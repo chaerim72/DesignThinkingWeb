@@ -1,5 +1,6 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+const bgmSoundUrl = "../assets/sounds/trashsound.wav";
 
 // 게임 설정 시스템 물리 수치 (극강의 스릴을 위한 재튜닝)
 let gameResult = "READY";
@@ -13,6 +14,38 @@ let obstacles = [];
 let frameCount = 0;
 let nextObstacleFrame = 45; // 첫 장애물 등장 타이밍을 당김
 let isSpacePressed = false;
+
+function startBgm() {
+  if (window.AudioManager) {
+    AudioManager.playBgm(bgmSoundUrl);
+  } else {
+    if (!window._trashRunBgm) {
+      window._trashRunBgm = new Audio(bgmSoundUrl);
+      window._trashRunBgm.loop = true;
+    }
+    window._trashRunBgm.volume =
+      Number(localStorage.getItem("bgmVolume") || 85) / 100;
+    window._trashRunBgm.play().catch(() => {});
+  }
+}
+
+function pauseBgm() {
+  if (window.AudioManager) {
+    AudioManager.pauseBgm();
+  } else if (window._trashRunBgm) {
+    window._trashRunBgm.pause();
+  }
+}
+
+function playJumpSfx() {
+  if (window.AudioManager) {
+    AudioManager.playSfx("jump");
+  } else {
+    const sfx = new Audio("../assets/sounds/jump.wav");
+    sfx.volume = Number(localStorage.getItem("sfxVolume") || 62) / 100;
+    sfx.play().catch(() => {});
+  }
+}
 
 // 플레이어 오브젝트
 const player = {
@@ -312,6 +345,7 @@ function gameLoop() {
 
     if (checkCollision(player, obstacles[i])) {
       gameResult = "GAMEOVER";
+      pauseBgm();
     }
 
     if (obstacles[i].x + obstacles[i].width < 0) {
@@ -331,9 +365,11 @@ window.addEventListener("keydown", (e) => {
     isSpacePressed = true;
     if (gameResult === "READY") {
       gameResult = "RUNNING";
+      startBgm();
     } else if (player.isGrounded && gameResult === "RUNNING") {
       player.velocityY = player.jumpForce;
       player.isGrounded = false;
+      playJumpSfx();
     }
   }
   if (e.code === "Enter" && gameResult === "GAMEOVER") {

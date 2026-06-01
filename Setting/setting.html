@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>설정</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+    <link rel="stylesheet" href="../css/common.css" />
+    <link rel="stylesheet" href="setting.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-left">
+        <a href="../index.html" class="logo">
+          <img
+            src="../assets/images/바나나.png"
+            alt="Banana Logo"
+            class="logo-img"
+          />
+        </a>
+      </div>
+
+      <div class="nav-center">
+        <div class="nav-menu">
+          <a href="../index.html#intro-start" class="nav-item">
+            <span class="item-text">소개</span>
+          </a>
+
+          <a href="../TrashCatch/trashcatch.html" class="nav-item">
+            <span class="item-text">쓰레기 담기</span>
+          </a>
+
+          <a href="../trashrun/trashrun.html" class="nav-item">
+            <span class="item-text">쓰레기 런</span>
+          </a>
+
+          <a href="../TrashUp/trashup.html" class="nav-item">
+            <span class="item-text">쓰레기 쌓기</span>
+          </a>
+
+          <a href="../Setting/setting.html" class="nav-item active">
+            <span class="item-text">설정</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-right"></div>
+    </nav>
+
+    <main class="setting-container">
+      <h1>설정</h1>
+
+      <section class="audio-settings">
+        <h2>오디오 설정</h2>
+        <div class="control-group">
+          <label for="master-volume">배경음</label>
+          <input
+            type="range"
+            id="master-volume"
+            class="slider"
+            min="0"
+            max="100"
+            value="85"
+          />
+          <span id="master-value-text" class="value-text">85%</span>
+        </div>
+        <div class="control-group">
+          <label for="effect-volume">효과음</label>
+          <input
+            type="range"
+            id="effect-volume"
+            class="slider"
+            min="0"
+            max="100"
+            value="62"
+          />
+          <span id="effect-value-text" class="value-text">62%</span>
+        </div>
+      </section>
+
+      <section class="display-settings">
+        <h2>화면 모드 설정</h2>
+        <div class="control-group">
+          <span>다크모드 활성화</span>
+          <label class="switch">
+            <input type="checkbox" id="dark-mode-toggle" />
+            <span class="slider-round"></span>
+          </label>
+        </div>
+      </section>
+    </main>
+
+    <script src="../js/audioManager.js"></script>
+    <script src="setting.js"></script>
+  </body>
+</html>

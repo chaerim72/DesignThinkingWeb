@@ -5,7 +5,22 @@ let gameScore = 0;
 const scoreDisplay = document.getElementById("score");
 
 let gameLives = 3;
-const lifeDisplay = document.getElementById("life");
+const maxLives = 3;
+const lifeHeartsDisplay = document.getElementById("life-hearts");
+
+function updateHeartsDisplay() {
+  let heartString = "";
+
+  for (let i = 1; i <= maxLives; i++) {
+    if (i <= gameLives) {
+      heartString += "♥ ";
+    } else {
+      heartString += "♡ ";
+    }
+  }
+
+  lifeHeartsDisplay.textContent = heartString.trim();
+}
 
 let gameLevel = 1;
 const levelDisplay = document.getElementById("level");
@@ -79,7 +94,7 @@ function initAndStartGame() {
   isGamePaused = false;
 
   scoreDisplay.textContent = gameScore;
-  lifeDisplay.textContent = gameLives;
+  updateHeartsDisplay();
   levelDisplay.textContent = gameLevel;
 
   clearInterval(gameInterval1);
@@ -272,7 +287,7 @@ function updateAndDrawTrashItems() {
       i--;
 
       gameLives--;
-      lifeDisplay.textContent = gameLives;
+      updateHeartsDisplay();
 
       if (gameLives <= 0) {
         isGameOver = true;
@@ -382,4 +397,5 @@ function runGameLoop() {
   requestAnimationFrame(runGameLoop);
 }
 
+updateHeartsDisplay();
 runGameLoop();

@@ -1,0 +1,149 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css");
+
+:root {
+  --font-main: "Pretendard Variable", Pretendard, sans-serif;
+}
+
+body {
+  font-family: var(--font-main); /* 폰트 변수 사용 */
+}
+
+.setting-container {
+  padding-top: 150px;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+h1 {
+  font-size: 24pt;
+  margin-bottom: 20px;
+}
+h2 {
+  font-size: 24pt;
+  margin-bottom: 15px;
+}
+
+/* 음량 조절 그룹 */
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 20px 0;
+}
+.slider {
+  appearance: none;
+  -webkit-appearance: none; /* 브라우저 기본 디자인 제거 */
+  width: 100%;
+  height: 8px; /* 두께 */
+  background: #d9d9d9;
+  border-radius: 5px;
+}
+.slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8px;
+  cursor: pointer;
+  background: transparent;
+  border-radius: 5px;
+}
+.slider::-moz-range-track {
+  width: 100%;
+  height: 8px;
+  cursor: pointer;
+  background: transparent;
+  border-radius: 5px;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px; /* 손잡이 크기 */
+  height: 18px;
+  background: #ffffff;
+  border: 2px solid #999999;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -5px;
+}
+.slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #ffffff;
+  border: 2px solid #999999;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.control-group label {
+  width: 80px;
+}
+.slider {
+  flex: 1;
+  max-width: 300px;
+  cursor: pointer;
+}
+.value-text {
+  width: 40px;
+  text-align: right;
+  font-size: 14pt;
+}
+
+/* 다크모드 스위치 (수정된 사이즈) */
+
+.switch {
+  position: relative;
+  display: inline-block;
+  flex: 0 0 40px;
+  width: 55px;
+  height: 22px;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider-round {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 11px;
+}
+
+.slider-round:before {
+  position: absolute;
+  content: "";
+  width: 14px;
+  height: 14px;
+  top: 4px;
+  left: 7px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider-round {
+  background-color: #333;
+}
+input:checked + .slider-round:before {
+  transform: translateX(11px);
+} /* 이동 거리 조정 */
+
+/* 다크모드 테마 */
+body.dark-mode {
+  background-color: #111;
+  color: #fff;
+}
+body.dark-mode .item-text {
+  color: #fff;
+}
+body.dark-mode .item-text::after {
+  background-color: #fff;
+}
