@@ -51,18 +51,44 @@
       <div class="nav-right"></div>
     </nav>
 
-    <main class="trashcatch-page">
-      <div class="game-container">
-        <div id="main-game-area">
-          <div id="ui-board">
-            <div class="ui-item">LV: <span id="level">1</span></div>
-            <div class="ui-item">SCORE: <span id="score">0</span></div>
-            <div class="ui-item">LIFE: <span id="life">3</span></div>
-            <div class="center-line"></div>
+    <main class="game-page trashcatch-page">
+      <div class="game-layout">
+        <a
+          href="../TrashUp/trashup.html"
+          class="game-side-arrow"
+          aria-label="이전 게임"
+        >
+          ‹
+        </a>
+
+        <div class="game-center">
+          <div class="game-container">
+            <div id="main-game-area">
+              <div id="ui-board">
+                <div class="ui-item">LV: <span id="level">1</span></div>
+                <div class="ui-item">SCORE: <span id="score">0</span></div>
+                <div class="ui-item">LIFE: <span id="life">3</span></div>
+                <div class="center-line"></div>
+              </div>
+
+              <canvas id="gameCanvas" width="400" height="600"></canvas>
+            </div>
           </div>
 
-          <canvas id="gameCanvas" width="400" height="600"></canvas>
+          <div class="game-page-dots">
+            <span class="game-page-dot active"></span>
+            <span class="game-page-dot"></span>
+            <span class="game-page-dot"></span>
+          </div>
         </div>
+
+        <a
+          href="../TrashRun/trashrun.html"
+          class="game-side-arrow"
+          aria-label="다음 게임"
+        >
+          ›
+        </a>
       </div>
     </main>
 

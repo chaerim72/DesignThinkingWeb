@@ -1,79 +1,6 @@
+/* 공통 기본 설정 */
 * {
   box-sizing: border-box;
-}
-
-/* 상단 투명 메뉴바 */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding: 20px 30px;
-  box-sizing: border-box;
-  z-index: 10;
-  background: transparent;
-  border-bottom: none;
-}
-.nav-left {
-  flex: 1;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-.nav-center {
-  flex: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.nav-right {
-  flex: 1;
-}
-.logo-img {
-  width: 65px;
-  height: 65px;
-  object-fit: contain;
-}
-.nav-menu {
-  display: flex;
-  gap: 10px;
-  flex-wrap: nowrap;
-}
-.nav-item {
-  cursor: pointer;
-  user-select: none;
-  padding: 15px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-}
-.item-text {
-  color: #000000;
-  font-size: 16pt;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  position: relative;
-  padding: 2px 0;
-  white-space: nowrap;
-} /* 내비 호버 밑줄 두께 2.5px 균일화 */
-.item-text::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 2.5px;
-  bottom: -4px;
-  left: 0;
-  background-color: #000000;
-  transform: scaleX(0);
-  transform-origin: bottom center;
-  transition: transform 0.23s cubic-bezier(0.25, 1, 0.5, 1);
-}
-.nav-item:hover .item-text::after,
-.nav-item.active .item-text::after {
-  transform: scaleX(1);
 }
 
 html,
@@ -81,21 +8,191 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
-  overflow-x: hidden;
+  font-family: "Pretendard", sans-serif;
 }
 
-:root {
-  --bg-color: #ffffff;
-  --text-color: #000000;
-  --sub-bg-color: #2f2f2f;
-  --card-bg-color: #ffffff;
-  --card-border-color: #222222;
+/* 공통 상단 메뉴바 */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  padding: 14px 30px;
+  box-sizing: border-box;
+
+  z-index: 1000;
+  background: transparent;
+  border-bottom: none;
 }
 
-body.dark-mode {
-  --bg-color: #111111;
-  --text-color: #ffffff;
-  --sub-bg-color: #000000;
-  --card-bg-color: #1e1e1e;
-  --card-border-color: #ffffff;
+.nav-left {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.nav-center {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-right {
+  flex: 1;
+}
+
+.navbar .logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.navbar .logo-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  display: block;
+}
+
+.navbar .nav-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.navbar .nav-item {
+  cursor: pointer;
+  user-select: none;
+
+  padding: 10px 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-decoration: none;
+}
+
+.navbar .item-text {
+  position: relative;
+
+  padding: 2px 0;
+
+  color: #000000;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+/* 메뉴 밑줄 */
+.navbar .item-text::after {
+  content: "";
+  position: absolute;
+
+  width: 100%;
+  height: 2px;
+
+  bottom: -4px;
+  left: 0;
+
+  background-color: #000000;
+
+  transform: scaleX(0);
+  transform-origin: bottom center;
+  transition: transform 0.23s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.navbar .nav-item:hover .item-text::after,
+.navbar .nav-item.active .item-text::after {
+  transform: scaleX(1);
+}
+
+/* 게임 페이지 공통 레이아웃 */
+.game-page {
+  width: 100%;
+  min-height: 100vh;
+
+  padding-top: 110px;
+  padding-bottom: 70px;
+  padding-left: clamp(40px, 5vw, 80px);
+  padding-right: clamp(40px, 5vw, 80px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #ffffff;
+}
+
+/* 화살표 + 게임 화면 전체 묶음 */
+.game-layout {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: clamp(36px, 5vw, 80px);
+}
+
+/* 좌우 화살표 */
+.game-side-arrow {
+  width: clamp(36px, 4vw, 56px);
+  height: clamp(36px, 4vw, 56px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: #111111;
+  text-decoration: none;
+
+  font-size: clamp(42px, 4vw, 64px);
+  font-weight: 300;
+  line-height: 1;
+
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s ease;
+}
+
+.game-side-arrow:hover {
+  transform: scale(1.12);
+}
+
+/* 게임 화면 + 점 */
+.game-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 게임 화면 아래 점 */
+.game-page-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  padding-top: 28px;
+  padding-bottom: 28px;
+}
+
+.game-page-dot {
+  width: 8px;
+  height: 8px;
+  background: #d9d9d9;
+}
+
+.game-page-dot.active {
+  background: #333333;
 }

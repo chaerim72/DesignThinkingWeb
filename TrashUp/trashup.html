@@ -62,49 +62,65 @@
       <img id="img-coffee" src="../assets/images/trashup/coffee.png" />
     </div>
 
-    <main class="trashup-page">
-      <div class="nav-arrow">&lt;</div>
+    <main class="game-page trashup-page">
+      <div class="game-layout">
+        <a
+          href="../TrashRun/trashrun.html"
+          class="game-side-arrow"
+          aria-label="이전 게임"
+        >
+          ‹
+        </a>
 
-      <div class="game-wrapper">
-        <div class="game-title">Game 3 : 분리수거 실패 현장</div>
+        <div class="game-center">
+          <div class="game-wrapper">
+            <div class="game-title">Game 3 : 분리수거 실패 현장</div>
 
-        <div id="game-container">
-          <div id="hud" style="display: none">
-            <div class="score-box" id="score-text">Score: 000000</div>
-            <div class="controls">
-              <span>🔊</span>
-              <span id="pause-btn">⏸</span>
+            <div id="game-container">
+              <div id="hud" style="display: none">
+                <div class="score-box" id="score-text">Score: 000000</div>
+                <div class="controls">
+                  <span>🔊</span>
+                  <span id="pause-btn">⏸</span>
+                </div>
+              </div>
+
+              <div id="start-screen" class="ui-panel">
+                <h1>일단 올려</h1>
+                <p id="loading-text">쓰레기 사진 로딩 중... (0/8)</p>
+                <button class="btn" id="start-btn">Start</button>
+              </div>
+
+              <div id="pause-screen" class="ui-panel">
+                <h1>일시정지</h1>
+                <button class="btn" id="resume-btn">계속하기</button>
+              </div>
+
+              <div id="game-over-screen" class="ui-panel">
+                <h1>게임 종료</h1>
+                <p id="final-score">Score: 000000</p>
+                <button class="btn" id="restart-btn">다시하기 ↻</button>
+              </div>
+
+              <canvas id="gameCanvas" width="450" height="650"></canvas>
             </div>
           </div>
 
-          <div id="start-screen" class="ui-panel">
-            <h1>일단 올려</h1>
-            <p id="loading-text">쓰레기 사진 로딩 중... (0/8)</p>
-            <button class="btn" id="start-btn">Start</button>
+          <div class="game-page-dots">
+            <span class="game-page-dot"></span>
+            <span class="game-page-dot"></span>
+            <span class="game-page-dot active"></span>
           </div>
-
-          <div id="pause-screen" class="ui-panel">
-            <h1>일시정지</h1>
-            <button class="btn" id="resume-btn">계속하기</button>
-          </div>
-
-          <div id="game-over-screen" class="ui-panel">
-            <h1>게임 종료</h1>
-            <p id="final-score">Score: 000000</p>
-            <button class="btn" id="restart-btn">다시하기 ↻</button>
-          </div>
-
-          <canvas id="gameCanvas" width="450" height="650"></canvas>
         </div>
 
-        <div class="pagination">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot active"></div>
-        </div>
+        <a
+          href="../TrashCatch/trashcatch.html"
+          class="game-side-arrow"
+          aria-label="다음 게임"
+        >
+          ›
+        </a>
       </div>
-
-      <div class="nav-arrow">&gt;</div>
     </main>
 
     <script src="./trashup.js"></script>

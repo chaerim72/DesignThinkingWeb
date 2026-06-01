@@ -55,28 +55,44 @@
       <div class="nav-right"></div>
     </nav>
 
-    <main class="trashrun-page">
-      <button class="arrow-btn">&lt;</button>
+    <main class="game-page trashrun-page">
+      <div class="game-layout">
+        <a
+          href="../TrashCatch/trashcatch.html"
+          class="game-side-arrow"
+          aria-label="이전 게임"
+        >
+          ‹
+        </a>
 
-      <div class="game-container">
-        <div class="game-title">Game 2: 집 가는 길 왜 이래?</div>
+        <div class="game-center">
+          <div class="game-container">
+            <div class="game-title">Game 2: 집 가는 길 왜 이래?</div>
 
-        <canvas id="gameCanvas" width="1000" height="500"></canvas>
+            <canvas id="gameCanvas" width="1000" height="500"></canvas>
 
-        <div class="instructions">
-          스페이스바를 길게 누르면 고공 점프, 짧게 누르면 소형 점프가
-          가능합니다. 다시 시작은 Enter.
+            <div class="instructions">
+              스페이스바를 길게 누르면 고공 점프, 짧게 누르면 소형 점프가
+              가능합니다. 다시 시작은 Enter.
+            </div>
+          </div>
+
+          <div class="game-page-dots">
+            <span class="game-page-dot"></span>
+            <span class="game-page-dot active"></span>
+            <span class="game-page-dot"></span>
+          </div>
         </div>
+
+        <a
+          href="../TrashUp/trashup.html"
+          class="game-side-arrow"
+          aria-label="다음 게임"
+        >
+          ›
+        </a>
       </div>
-
-      <button class="arrow-btn">&gt;</button>
     </main>
-
-    <div class="dots-container">
-      <div class="dot"></div>
-      <div class="dot active"></div>
-      <div class="dot"></div>
-    </div>
 
     <script src="./trashrun.js"></script>
   </body>

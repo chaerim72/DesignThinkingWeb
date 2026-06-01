@@ -6,160 +6,142 @@
   --font-main: "Pretendard Variable", Pretendard, sans-serif;
 }
 
-body,
-html {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100vh; /* 원래의 꽉 찬 100vh 복원 */
-  overflow: hidden; /* 게임 화면 밖으로 스크롤 돌지 않게 차단 */
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+
   background-color: #ffffff;
   font-family: var(--font-main);
 }
 
-/* 쓰레기쌓기시작 */
-main {
-  height: calc(100vh - 85px); /* 상단바 높이를 뺀 나머지 화면 꽉 채우기 */
-  margin-top: 85px; /* 상단바 밑으로 깔리게 여백 지정 */
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  position: relative;
-  gap: 50px;
+.trashup-page {
   background-color: #ffffff;
 }
 
-/* 좌우 화살표 핏 원래대로 복원 */
-.nav-arrow {
-  font-size: 40px;
-  font-weight: bold;
-  cursor: pointer;
-  user-select: none;
-  color: #111;
-}
-
-/* 중앙 정렬용 래퍼 */
-.game-wrapper {
+.trashup-page .game-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* 타이틀 무드에 맞춰 왼쪽 정렬 */
+  align-items: flex-start;
 }
 
-.game-title {
+.trashup-page .game-title {
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 10px;
-  color: #111;
+  color: #111111;
 }
 
-/* 원래의 세로로 긴 450x650 그리드 네모 박스 원상 복구 */
-#game-container {
+.trashup-page #game-container {
   position: relative;
+
   width: 450px !important;
   height: 650px !important;
+
   background-color: #ffffff;
-  border: 1px solid #999;
+  border: 1px solid #999999;
   overflow: hidden;
+
   background-image:
     linear-gradient(to right, #e5e5e5 1px, transparent 1px),
     linear-gradient(to bottom, #e5e5e5 1px, transparent 1px);
   background-size: 45px 45px;
+
   cursor: pointer;
   box-sizing: border-box;
 }
 
-canvas {
+.trashup-page #gameCanvas {
   display: block;
   width: 450px !important;
   height: 650px !important;
 }
 
-/* 인게임 HUD 스펙 */
-#hud {
+.trashup-page #hud {
   position: absolute;
   top: 0;
   left: 0;
+
   width: 100%;
   height: 45px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   background: rgba(225, 225, 225, 0.9);
-  border-bottom: 1px solid #999;
+  border-bottom: 1px solid #999999;
   padding: 0 15px;
+
   z-index: 5;
   box-sizing: border-box;
 }
-.score-box {
+
+.trashup-page .score-box {
   font-size: 18px;
   font-weight: 700;
-  color: #111;
+  color: #111111;
 }
-.controls span {
+
+.trashup-page .controls span {
   font-size: 20px;
   cursor: pointer;
   margin-left: 10px;
 }
 
-/* UI 패널 (스타트 화면, 일시정지, 게임오버) */
-.ui-panel {
+.trashup-page .ui-panel {
   position: absolute;
   top: 0;
   left: 0;
+
   width: 100%;
   height: 100%;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   z-index: 10;
   background: rgba(255, 255, 255, 0.95);
   box-sizing: border-box;
 }
-.ui-panel h1 {
+
+.trashup-page .ui-panel h1 {
   font-size: 36px;
   margin-bottom: 10px;
   font-weight: 700;
-  color: #111;
+  color: #111111;
 }
-.ui-panel p {
+
+.trashup-page .ui-panel p {
   font-size: 15px;
-  color: #555;
+  color: #555555;
   margin-bottom: 30px;
   text-align: center;
   line-height: 1.5;
 }
 
-/* 시작하기 버튼 */
-.btn {
+.trashup-page .btn {
   padding: 10px 30px;
+
   font-size: 20px;
   font-weight: bold;
+
   background: transparent;
-  border: 2px solid #111;
+  border: 2px solid #111111;
   border-radius: 8px;
+
   cursor: pointer;
   transition: 0.2s;
-  color: #111;
-}
-.btn:hover {
-  background: #111;
-  color: #fff;
+  color: #111111;
 }
 
-/* 페이지네이션 하단 도트 */
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
-  width: 100%;
-}
-.dot {
-  width: 8px;
-  height: 8px;
-  background-color: #ccc;
-}
-.dot.active {
-  background-color: #333;
+.trashup-page .btn:hover {
+  background: #111111;
+  color: #ffffff;
 }
