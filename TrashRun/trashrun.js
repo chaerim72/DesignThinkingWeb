@@ -239,7 +239,7 @@ function drawUI() {
     ctx.font = "bold 18px sans-serif";
     ctx.textAlign = "center";
     ctx.fillText(
-      "SpaceBar 를 누르면 게임을 시작합니다.",
+      "[CLICK SCREEN TO START]",
       canvas.width / 2,
       canvas.height / 2,
     );

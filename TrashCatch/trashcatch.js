@@ -148,15 +148,15 @@ window.addEventListener("mousemove", (event) => {
   }
 });
 
-window.addEventListener("keydown", (event) => {
-  if (!isFirstClickToStart) return;
+// window.addEventListener("keydown", (event) => {
+//   if (!isFirstClickToStart) return;
 
-  if (!isGameOver) {
-    if (event.key === "Escape" || event.key === "Esc") {
-      isGamePaused = !isGamePaused;
-    }
-  }
-});
+//   if (!isGameOver) {
+//     if (event.key === "Escape" || event.key === "Esc") {
+//       isGamePaused = !isGamePaused;
+//     }
+//   }
+// });
 
 gameCanvas.addEventListener("click", (event) => {
   const rect = gameCanvas.getBoundingClientRect();
@@ -353,7 +353,7 @@ function drawPausedScreen() {
 
   gameCtx.font = "600 13px 'Pretendard', sans-serif";
   gameCtx.fillText(
-    "(Click button or ESC to resume)",
+    "(Click button to resume)",
     gameCanvas.width / 2,
     gameCanvas.height / 2 + 20,
   );
