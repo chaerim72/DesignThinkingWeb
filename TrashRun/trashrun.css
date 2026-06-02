@@ -16,7 +16,7 @@ body {
 }
 
 .trashrun-page .game-container {
-  width: clamp(760px, 72vw, 920px);
+  width: clamp(760px, 62vw, 920px);
 
   display: flex;
   flex-direction: column;

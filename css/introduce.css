@@ -452,8 +452,8 @@ html {
 }
 
 .carousel-dot {
-  width: clamp(10px, 0.8vw, 13px);
-  height: clamp(10px, 0.8vw, 13px);
+  width: 12px;
+  height: 12px;
 
   border: none;
   background: #d9d9d9;

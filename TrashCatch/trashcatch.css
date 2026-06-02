@@ -13,6 +13,9 @@ body {
 
 .trashcatch-page {
   background: #ffffff;
+
+  /* 쓰레기 담기 게임 공통 크기 */
+  --trashcatch-width: clamp(300px, 25vw, 340px);
 }
 
 .trashcatch-page .game-container {
@@ -22,10 +25,10 @@ body {
 }
 
 .trashcatch-page .game-title {
-  width: 400px;
+  width: var(--trashcatch-width);
   margin: 0 0 10px;
 
-  font-size: 14px;
+  font-size: clamp(13px, 1vw, 15px);
   font-weight: 700;
   color: #000000;
   text-align: left;
@@ -36,13 +39,12 @@ body {
   flex-direction: column;
   align-items: center;
 
-  transform: scale(0.9);
-  transform-origin: center;
   position: relative;
 }
 
+/* 상단 UI 보드 */
 .trashcatch-page #ui-board {
-  width: 400px;
+  width: var(--trashcatch-width);
   background-color: #ffffff;
   color: #000000;
 
@@ -56,7 +58,7 @@ body {
   justify-content: space-between;
   align-items: center;
 
-  font-size: 14px;
+  font-size: clamp(12px, 0.95vw, 14px);
   font-weight: 700;
   letter-spacing: -0.02em;
 
@@ -74,9 +76,11 @@ body {
   z-index: 99;
 }
 
+/* 실제 게임 화면 */
 .trashcatch-page #gameCanvas {
-  width: 400px;
-  height: 600px;
+  width: var(--trashcatch-width);
+  height: auto;
+  aspect-ratio: 400 / 600;
 
   background-color: #ffffff;
   display: block;
