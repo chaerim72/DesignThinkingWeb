@@ -13,7 +13,7 @@ const gravity = 0.95; // 중력을 대폭 높여 체공 시간을 줄이고, 빠
 let obstacles = [];
 let frameCount = 0;
 let nextObstacleFrame = 45; // 첫 장애물 등장 타이밍을 당김
-let isSpacePressed = false;
+let isMousePressed = false;
 
 function startBgm() {
   if (window.AudioManager) {
@@ -113,7 +113,7 @@ const player = {
   update() {
     if (
       !this.isGrounded &&
-      !isSpacePressed &&
+      !isMousePressed &&
       this.velocityY < this.minJumpForce
     ) {
       this.velocityY = this.minJumpForce;
@@ -359,28 +359,28 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 }
 
-window.addEventListener("keydown", (e) => {
-  if (e.code === "Space") {
-    e.preventDefault();
-    isSpacePressed = true;
-    if (gameResult === "READY") {
-      gameResult = "RUNNING";
-      startBgm();
-    } else if (player.isGrounded && gameResult === "RUNNING") {
-      player.velocityY = player.jumpForce;
-      player.isGrounded = false;
-      playJumpSfx();
-    }
-  }
-  if (e.code === "Enter" && gameResult === "GAMEOVER") {
+window.addEventListener("mousedown", (e) => {
+  if (e.target.closest(".navbar") || e.target.closest(".game-side-arrow"))
+    return;
+  isMousePressed = true;
+
+  if (gameResult === "READY") {
+    gameResult = "RUNNING";
+    startBgm();
+  } else if (gameResult === "RUNNING" && player.isGrounded) {
+    player.velocityY = player.jumpForce;
+    player.isGrounded = false;
+    playJumpSfx();
+  } else if (gameResult === "GAMEOVER") {
+    // click 이벤트와 분리하지 않고 mousedown 시점에 단 한 번만 리셋하여 렉 발생을 원천 차단
     resetGame();
+    startBgm();
   }
 });
 
-window.addEventListener("keyup", (e) => {
-  if (e.code === "Space") {
-    isSpacePressed = false;
-  }
+// 2. 마우스 버튼에서 손을 떼는 순간 (스페이스바 업 기능 대체 - 가변 점프 유지용)
+window.addEventListener("mouseup", () => {
+  isMousePressed = false;
 });
 
 gameLoop();

@@ -1,9 +1,9 @@
 //이 파일을 모든 HTML에서 <script src="../js/audioManager.js"></script>로 불러오세요.//
 
 const AudioManager = {
-  // 설정값 가져오기 (없으면 기본값 50)
+  // 설정값 가져오기 (없으면 기본값 30)
   getVolume(type) {
-    return Number(localStorage.getItem(type + "Volume") ?? 50);
+    return Number(localStorage.getItem(type + "Volume") ?? 30);
   },
 
   // 오디오 객체 생성 및 설정 적용
