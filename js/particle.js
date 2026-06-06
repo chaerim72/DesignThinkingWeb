@@ -23,7 +23,7 @@ const easedMouse = {
 };
 
 /* 이미지 경로 */
-const imageList = ["./assets/images/바나나.png"];
+const imageList = ["./assets/images/바나나 흑백.png"];
 const randomImageName = imageList[Math.floor(Math.random() * imageList.length)];
 
 window.addEventListener("mousemove", (event) => {
@@ -157,15 +157,17 @@ mainImg.onload = () => {
 let centerX = 0;
 let centerY = 0;
 
-/* 로고 크기 조절 */
-let baseScale = 1.9;
+/* 화면에 보일 바나나 가로 크기 */
+let logoTargetWidth = 480;
 let particleOffsetY = 30;
 
 function initMainParticles(image) {
   particleArray = [];
 
-  const scaledWidth = image.width * baseScale;
-  const scaledHeight = image.height * baseScale;
+  const imageRatio = image.height / image.width;
+
+const scaledWidth = logoTargetWidth;
+const scaledHeight = logoTargetWidth * imageRatio;
 
   const tempCanvas = document.createElement("canvas");
   const tempCtx = tempCanvas.getContext("2d");

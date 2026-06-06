@@ -2,6 +2,54 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const bgmSoundUrl = "../assets/sounds/trashsound.wav";
 
+// 캐릭터 이미지 불러오기
+const playerImage = new Image();
+playerImage.src = "../assets/images/쓰레기런_캐릭터기본.png";
+
+// 장애물 이미지 불러오기
+const obstacleImage1 = new Image();
+obstacleImage1.src = "../assets/images/trash-catch-02.png";
+
+const obstacleImage2 = new Image();
+obstacleImage2.src = "../assets/images/trash-catch-01.png";
+
+const obstacleImage3 = new Image();
+obstacleImage3.src = "../assets/images/trash-catch-03.png";
+
+const obstacleImage4 = new Image();
+obstacleImage4.src = "../assets/images/bottle.png";
+
+const obstacleImages = [
+  obstacleImage1,
+  obstacleImage2,
+  obstacleImage3,
+  obstacleImage4,
+];
+
+//배경이미지 불러오기
+const backgroundImages = [];
+
+const bgImage1 = new Image();
+bgImage1.src = "../assets/images/쓰레기런배경_상명대.png";
+
+const bgImage2 = new Image();
+bgImage2.src = "../assets/images/쓰레기런배경_상명.png";
+
+const bgImage3 = new Image();
+bgImage3.src = "../assets/images/쓰레기런배경_호서.png";
+
+const bgImage4 = new Image();
+bgImage4.src = "../assets/images/쓰레기런배경_천호지.png";
+
+const bgImage5 = new Image();
+bgImage5.src = "../assets/images/쓰레기런배경_백석.png";
+
+backgroundImages.push(bgImage1, bgImage2, bgImage3, bgImage4, bgImage5);
+
+let currentBgIndex = 0;
+let backgroundX = 0;
+let backgroundSpeed = 5;
+
 // 게임 설정 시스템 물리 수치 (극강의 스릴을 위한 재튜닝)
 let gameResult = "READY";
 let score = 0;
@@ -51,7 +99,7 @@ function playJumpSfx() {
 const player = {
   x: 120,
   y: 340,
-  width: 45,
+  width: 80,
   height: 80,
   velocityY: 0,
   isGrounded: false,
@@ -59,56 +107,39 @@ const player = {
   minJumpForce: -7, // 가변 숏점프 제어를 더 날카롭게 변경
 
   draw() {
-    ctx.save();
-    ctx.imageSmoothingEnabled = false;
+  ctx.save();
 
-    // 1. 머리 그리기
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
+
+  if (playerImage.complete && playerImage.naturalWidth > 0) {
+    ctx.drawImage(
+      playerImage,
+      this.x,
+      this.y,
+      this.width,
+      this.height
+    );
+  } else {
+    // 이미지가 아직 안 불러와졌을 때 임시 네모
     ctx.fillStyle = "#000000";
-    ctx.fillRect(this.x + 8, this.y, 28, 28);
-    ctx.clearRect(this.x + 12, this.y + 6, 6, 6);
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+  }
 
-    // 2. 몸통 및 팔
-    ctx.fillRect(this.x + 14, this.y + 28, 16, 30);
-    if (Math.floor(frameCount / 4) % 2 === 0) {
-      // 다리 속도에 맞춰 팔도 빠르게 교차
-      ctx.fillRect(this.x + 4, this.y + 34, 10, 8);
-      ctx.fillRect(this.x + 30, this.y + 30, 8, 8);
-    } else {
-      ctx.fillRect(this.x + 8, this.y + 30, 6, 8);
-      ctx.fillRect(this.x + 30, this.y + 34, 10, 8);
-    }
+  if (gameResult === "READY") {
+    ctx.strokeStyle = "#ff3399";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(this.x + this.width / 2, this.y + 130);
+    ctx.lineTo(this.x + this.width / 2, this.y + 85);
+    ctx.moveTo(this.x + this.width / 2 - 6, this.y + 93);
+    ctx.lineTo(this.x + this.width / 2, this.y + 85);
+    ctx.lineTo(this.x + this.width / 2 + 6, this.y + 93);
+    ctx.stroke();
+  }
 
-    // 3. 다리 달리기 구동 애니메이션 (속도감 반영하여 프레임 단축)
-    if (!this.isGrounded) {
-      ctx.fillRect(this.x + 10, this.y + 58, 8, 14);
-      ctx.fillRect(this.x + 24, this.y + 58, 8, 10);
-    } else if (Math.floor(frameCount / 3) % 2 === 0) {
-      // 더 다다다닥 뛰도록 변경
-      ctx.fillRect(this.x + 10, this.y + 58, 9, 22);
-      ctx.fillRect(this.x + 24, this.y + 58, 9, 14);
-    } else {
-      ctx.fillRect(this.x + 10, this.y + 58, 9, 14);
-      ctx.fillRect(this.x + 24, this.y + 58, 9, 22);
-    }
-
-    // 4. 캐릭터 뒤쪽 도트 먼지 이펙트
-    ctx.fillStyle = "#dcdcdc";
-    ctx.fillRect(this.x - 12, this.y + 42, 10, 10);
-    ctx.fillRect(this.x - 22, this.y + 48, 8, 8);
-
-    if (gameResult === "READY") {
-      ctx.strokeStyle = "#ff3399";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(this.x + 22, this.y + 130);
-      ctx.lineTo(this.x + 22, this.y + 85);
-      ctx.moveTo(this.x + 16, this.y + 93);
-      ctx.lineTo(this.x + 22, this.y + 85);
-      ctx.lineTo(this.x + 28, this.y + 93);
-      ctx.stroke();
-    }
-    ctx.restore();
-  },
+  ctx.restore();
+},
 
   update() {
     if (
@@ -134,62 +165,46 @@ const player = {
 class Obstacle {
   constructor() {
     this.x = canvas.width + 50;
-    this.type = Math.floor(Math.random() * 3);
 
+    this.type = Math.floor(Math.random() * obstacleImages.length);
+    this.image = obstacleImages[this.type];
+
+    // 이미지별 기준 높이만 지정
     if (this.type === 0) {
-      this.width = 32;
-      this.height = 78; // 캔 기둥 (높아서 숏점프하면 걸림)
+      this.height = 54;
     } else if (this.type === 1) {
-      this.width = 48;
-      this.height = 62; // 일회용 컵
+      this.height = 56;
+    } else if (this.type === 2) {
+      this.height = 72;
     } else {
-      this.width = 70;
-      this.height = 48; // 과자 봉지 (길어서 멀리 뛰어야 함)
+      this.height = 40;
     }
+
+    // 일단 임시 width
+    this.width = 50;
+
+    // 이미지가 로드되어 있으면 원본 비율로 width 계산
+    if (this.image.complete && this.image.naturalWidth > 0) {
+      const ratio = this.image.naturalWidth / this.image.naturalHeight;
+      this.width = this.height * ratio;
+    }
+
     this.y = 420 - this.height;
   }
 
   draw() {
     ctx.save();
-    ctx.fillStyle = "#111111";
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
 
-    if (this.type === 0) {
-      ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
-      ctx.rotate(0.18);
-      ctx.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(-this.width / 2 + 6, -this.height / 2, 4, this.height);
-    } else if (this.type === 1) {
-      ctx.fillRect(this.x, this.y + 15, this.width, this.height - 15);
-      ctx.beginPath();
-      ctx.arc(this.x + this.width / 2, this.y + 15, this.width / 2, Math.PI, 0);
-      ctx.fill();
-      this.drawArrow();
+    if (this.image.complete && this.image.naturalWidth > 0) {
+      ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     } else {
-      ctx.beginPath();
-      ctx.moveTo(this.x, this.y + this.height);
-      ctx.lineTo(this.x + 15, this.y);
-      ctx.lineTo(this.x + this.width - 10, this.y + 10);
-      ctx.lineTo(this.x + this.width, this.y + this.height);
-      ctx.closePath();
-      ctx.fill();
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(this.x + 15, this.y + 25, this.width - 30, 8);
-      this.drawArrow();
+      ctx.fillStyle = "#111111";
+      ctx.fillRect(this.x, this.y, this.width, this.height);
     }
-    ctx.restore();
-  }
 
-  drawArrow() {
-    ctx.strokeStyle = "#ff3399";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(this.x - 10, this.y + 32);
-    ctx.lineTo(this.x - 35, this.y + 32);
-    ctx.lineTo(this.x - 28, this.y + 26);
-    ctx.moveTo(this.x - 35, this.y + 32);
-    ctx.lineTo(this.x - 28, this.y + 38);
-    ctx.stroke();
+    ctx.restore();
   }
 
   update() {
@@ -197,14 +212,90 @@ class Obstacle {
   }
 }
 
+//배경 그리기
+function drawGridBackground() {
+  const gridSize = 50;
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.strokeStyle = "#e0e0e0";
+  ctx.lineWidth = 1;
+
+  for (let x = 0; x <= canvas.width; x += gridSize) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, canvas.height);
+    ctx.stroke();
+  }
+
+  for (let y = 0; y <= canvas.height; y += gridSize) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
+    ctx.stroke();
+  }
+}
+
+function drawMovingBackground() {
+  const currentBg = backgroundImages[currentBgIndex];
+  const nextBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+  const nextBg = backgroundImages[nextBgIndex];
+
+  // 이미지가 아직 안 불러와졌으면 넘어감
+  if (
+    !currentBg.complete ||
+    currentBg.naturalWidth === 0 ||
+    !nextBg.complete ||
+    nextBg.naturalWidth === 0
+  ) {
+    return;
+  }
+
+  // 배경 이미지 세로 사이즈
+  const bgHeight = canvas.height*0.75;
+
+  const currentScale = bgHeight / currentBg.naturalHeight;
+  const currentWidth = currentBg.naturalWidth * currentScale;
+
+  const nextScale = bgHeight / nextBg.naturalHeight;
+  const nextWidth = nextBg.naturalWidth * nextScale;
+
+  const bgY = canvas.height - bgHeight;
+
+  // 이미지 확대 시 품질 보정
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
+
+  if (gameResult === "RUNNING") {
+    backgroundX -= backgroundSpeed;
+  }
+
+  // 현재 배경
+  ctx.drawImage(currentBg, backgroundX, bgY, currentWidth, bgHeight);
+
+  // 다음 배경
+  ctx.drawImage(nextBg, backgroundX + currentWidth, bgY, nextWidth, bgHeight);
+
+  // 현재 배경이 완전히 지나가면 다음 이미지로 변경
+  if (backgroundX <= -currentWidth) {
+    backgroundX += currentWidth;
+    currentBgIndex++;
+
+    if (currentBgIndex >= backgroundImages.length) {
+      currentBgIndex = 0;
+    }
+  }
+}
+
 function drawUI() {
-  // 스코어박스
-  ctx.strokeStyle = "#7f7f7f";
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(0, 420);
-  ctx.lineTo(canvas.width, 420);
-  ctx.stroke();
+  // 바닥
+  // ctx.strokeStyle = "#7f7f7f";
+  // ctx.lineWidth = 2;
+  // ctx.beginPath();
+  // ctx.moveTo(0, 420);
+  // ctx.lineTo(canvas.width, 420);
+  // ctx.stroke();
 
   const scoreBoxWidth = 140;
   const scoreBoxHeight = 32;
@@ -218,14 +309,14 @@ function drawUI() {
   ctx.strokeRect(scoreBoxX, scoreBoxY, scoreBoxWidth, scoreBoxHeight);
 
   ctx.fillStyle = "#000000";
-  ctx.font = '700 15px "Pretendard", sans-serif';
+  ctx.font = '400 12px "Pretendard", sans-serif';
   ctx.textAlign = "center";
   let paddedScore = String(Math.floor(score)).padStart(6, "0");
   ctx.fillText(`Score: ${paddedScore}`, canvas.width / 2, scoreBoxY + 21);
 
   // 바닥
-  ctx.fillStyle = "#f0f0f0";
-  ctx.fillRect(0, 421, canvas.width, canvas.height - 421);
+  // ctx.fillStyle = "#f0f0f0";
+  // ctx.fillRect(0, 421, canvas.width, canvas.height - 421);
 
   ctx.fillStyle = "#4a4a4a";
   ctx.font = "16px sans-serif";
@@ -236,10 +327,11 @@ function drawUI() {
     ctx.fillStyle = "rgba(255,255,255,0.4)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#000000";
-    ctx.font = "bold 18px sans-serif";
+     ctx.font = '700 18px "Pretendard", sans-serif';
     ctx.textAlign = "center";
+
     ctx.fillText(
-      "[CLICK SCREEN TO START]",
+      "[ 클릭하여 게임 시작하기 ]",
       canvas.width / 2,
       canvas.height / 2,
     );
@@ -264,7 +356,7 @@ function drawUI() {
     ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2 - 5);
     ctx.font = "12px sans-serif";
     ctx.fillText(
-      "다시 시작하려면 ENTER",
+      "다시 시작하려면 클릭",
       canvas.width / 2,
       canvas.height / 2 + 20,
     );
@@ -293,32 +385,20 @@ function resetGame() {
   player.y = 340;
   player.velocityY = 0;
   gameResult = "RUNNING";
+  currentBgIndex = 0;
+  backgroundX = 0;
 }
 
-function gameLoop() {
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.strokeStyle = "#f4f4f4";
-  ctx.lineWidth = 1;
-  for (let x = 0; x < canvas.width; x += 22) {
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, canvas.height);
-    ctx.stroke();
-  }
-  for (let y = 0; y < canvas.height; y += 22) {
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(canvas.width, y);
-    ctx.stroke();
-  }
+function gameLoop() {
+  drawGridBackground();
+  drawMovingBackground();
 
   if (gameResult === "RUNNING") {
-    frameCount++;
-    score += 0.25; // 점수 상승 속도도 스릴에 맞춰 상향
 
-    // 상시 가속도 엔진 튜닝: 가속 계수를 0.0015에서 0.004로 대폭 상향 (순식간에 빨라짐)
+    frameCount++;
+    score += 0.25;
+
     if (gameSpeed < maxSpeed) {
       gameSpeed += 0.004;
     }
