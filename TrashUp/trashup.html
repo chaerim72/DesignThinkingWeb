@@ -21,7 +21,7 @@
       <div class="nav-left">
         <a href="../index.html" class="logo">
           <img
-            src="../assets/images/바나나.png"
+            src="../assets/images/바나나 흑백.png"
             alt="Banana Logo"
             class="logo-img"
           />
@@ -52,11 +52,11 @@
     </nav>
 
     <div id="image-preload-cache" style="display: none">
-      <img id="img-tissue" src="../assets/images/trashup/tissue.png" />
+      <!-- <img id="img-tissue" src="../assets/images/trashup/tissue.png" /> -->
       <img id="img-chopsticks" src="../assets/images/chopsticks.png" />
       <img id="img-butt" src="../assets/images/butt.png" />
-      <img id="img-card" src="../assets/images/trashup/card.jpg" />
-      <img id="img-snack" src="../assets/images/trashup/snack.jpg" />
+      <img id="img-card" src="../assets/images/당일 대출 명함_웹 게임.png" />
+      <img id="img-snack" src="../assets/images/쓰레기쌓기_라면당.png" />
       <img id="img-cundition" src="../assets/images/trash-catch-02.png" />
       <img id="img-welchs" src="../assets/images/welchs.png" />
       <img id="img-bottle" src="../assets/images/bottle.png" />
@@ -86,20 +86,19 @@
               </div>
 
               <div id="start-screen" class="ui-panel">
-                <h1>일단 올려</h1>
-                <p id="loading-text">쓰레기 사진 로딩 중... (0/8)</p>
-                <button class="btn" id="start-btn">Start</button>
+                <p class="start-guide">마우스로 클릭해 쓰레기를 쌓으세요</p>
+                <p class="start-click" id="loading-text">[ 클릭하여 게임 시작하기 ]</p>
               </div>
 
-              <div id="pause-screen" class="ui-panel">
-                <h1>일시정지</h1>
-                <button class="btn" id="resume-btn">계속하기</button>
+              <div id="pause-screen" class="ui-panel" style="display: none">
+                <p class="game-over-title">일시정지</p>
+                <p class="game-over-click" id="resume-btn">[ 클릭하여 계속하기 ]</p>
               </div>
 
-              <div id="game-over-screen" class="ui-panel">
-                <h1>게임 종료</h1>
-                <p id="final-score">Score: 000000</p>
-                <button class="btn" id="restart-btn">다시하기 ↻</button>
+              <div id="game-over-screen" class="ui-panel" style="display: none">
+                <p class="game-over-title">게임 오버</p>
+                <p id="final-score" class="game-over-score">Score: 000000</p>
+                <p class="game-over-click">[ 클릭하여 다시시작하기 ]</p>
               </div>
 
               <canvas id="gameCanvas" width="450" height="650"></canvas>
@@ -123,6 +122,7 @@
       </div>
     </main>
 
+    <script src="../js/audioManager.js"></script>
     <script src="./trashup.js"></script>
   </body>
 </html>

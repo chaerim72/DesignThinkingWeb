@@ -24,7 +24,7 @@ body {
   background-color: #ffffff;
 
   /* 쓰레기 쌓기 게임 공통 크기 */
-  --trashup-width: clamp(320px, 25vw, 380px);
+  --trashup-width: clamp(320px, calc(var(--safe-vw) * 25), 380px);
 }
 
 .trashup-page .game-wrapper {
@@ -37,10 +37,36 @@ body {
   width: var(--trashup-width);
   margin: 0 0 10px;
 
-  font-size: clamp(13px, 1vw, 15px);
+  font-size: 14px;
   font-weight: 700;
   color: #111111;
   text-align: left;
+}
+
+.trashup-page .game-over-title {
+  margin: 0 0 10px;
+
+  font-size: 20px;
+  font-weight: 800;
+  color: #000000;
+  letter-spacing: -0.03em;
+}
+
+.trashup-page .game-over-score {
+  margin: 0 0 10px;
+
+  font-size: 15px;
+  font-weight: 700;
+  color: #000000;
+}
+
+.trashup-page .game-over-click {
+  margin: 0;
+
+  font-size: 16px;
+  font-weight: 800;
+  color: #000000;
+  letter-spacing: -0.03em;
 }
 
 .trashup-page #game-container {
@@ -85,20 +111,20 @@ body {
 
   background: rgba(225, 225, 225, 0.9);
   border-bottom: 1px solid #999999;
-  padding: 0 clamp(12px, 1.2vw, 15px);
+  padding: 0 clamp(12px, calc(var(--safe-vw) * 1.2), 15px);
 
   z-index: 5;
   box-sizing: border-box;
 }
 
 .trashup-page .score-box {
-  font-size: clamp(14px, 1.2vw, 18px);
+  font-size: clamp(14px, calc(var(--safe-vw) * 1.2), 18px);
   font-weight: 700;
   color: #111111;
 }
 
 .trashup-page .controls span {
-  font-size: clamp(16px, 1.4vw, 20px);
+  font-size: clamp(16px, calc(var(--safe-vw) * 1.4), 20px);
   cursor: pointer;
   margin-left: 10px;
 }
@@ -117,31 +143,37 @@ body {
   align-items: center;
 
   z-index: 10;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.45);
   box-sizing: border-box;
 }
 
-.trashup-page .ui-panel h1 {
-  margin: 0 0 10px;
-
-  font-size: clamp(28px, 2.5vw, 36px);
-  font-weight: 700;
-  color: #111111;
+.trashup-page #pause-screen,
+.trashup-page #game-over-screen {
+  display: none;
 }
 
-.trashup-page .ui-panel p {
-  margin: 0 0 30px;
+.trashup-page .start-guide {
+  margin: 0 0 10px;
 
-  font-size: clamp(13px, 1.1vw, 15px);
-  color: #555555;
-  text-align: center;
-  line-height: 1.5;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000000;
+  letter-spacing: -0.03em;
+}
+
+.trashup-page .start-click {
+  margin: 0;
+
+  font-size: 16px;
+  font-weight: 800;
+  color: #000000;
+  letter-spacing: -0.03em;
 }
 
 .trashup-page .btn {
-  padding: clamp(8px, 0.8vw, 10px) clamp(24px, 2vw, 30px);
+  padding: clamp(8px, calc(var(--safe-vw) * 0.8), 10px) clamp(24px, calc(var(--safe-vw) * 2), 30px);
 
-  font-size: clamp(16px, 1.5vw, 20px);
+  font-size: clamp(16px, calc(var(--safe-vw) * 1.5), 20px);
   font-weight: bold;
 
   background: transparent;

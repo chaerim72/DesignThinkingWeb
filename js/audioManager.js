@@ -38,7 +38,12 @@ const AudioManager = {
   // 배경음 / 효과음 오디오 저장
   bgm: null,
   sounds: {
-    jump: new Audio("../assets/sounds/jump.wav"),
+    catch: new Audio("../assets/sounds/- Coin 1.mp3"),
+    levelup: new Audio("../assets/sounds/- Correct 1.mp3"), 
+
+    jump: new Audio("../assets/sounds/- Storytelling Cartoon SwishCartoon 02.mp3"),
+
+    stack: new Audio("../assets/sounds/- Storytelling Cartoon PopVocal 03.mp3"),
   },
 
   // 효과음 재생 함수
@@ -52,9 +57,16 @@ const AudioManager = {
 
   // 배경음 재생 함수
   playBgm(src) {
-    if (!this.bgm) {
+    if (!this.bgm || this.bgm.src !== new URL(src, location.href).href) {
+      if (this.bgm) {
+        this.bgm.pause();
+      }
+
       this.bgm = this.createAudio(src, "bgm");
     }
+
+    this.bgm.volume = this.getVolume("bgm") / 100;
+
     if (this.bgm.paused) {
       this.bgm.play().catch(() => {});
     }
@@ -66,3 +78,6 @@ const AudioManager = {
     }
   },
 };
+
+
+window.AudioManager = AudioManager;

@@ -1,4 +1,9 @@
 /* 공통 기본 설정 */
+:root {
+  /* 1vw처럼 쓰되, 1200~1600 사이에서만 변하는 단위 */
+  --safe-vw: clamp(12px, 1vw, 16px);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -11,6 +16,7 @@ body {
   min-width: 1200px;
   font-family: "Pretendard", sans-serif;
   overflow-x: auto;
+  overflow-y: auto;
 }
 
 /* 공통 상단 메뉴바 */
@@ -118,38 +124,55 @@ body {
   transform: scaleX(1);
 }
 
-/* 게임 페이지 공통 레이아웃 */
 .game-page {
   width: 100%;
   min-height: 100vh;
 
-  padding-top: 110px;
-  padding-bottom: 70px;
-  padding-left: clamp(40px, 5vw, 80px);
-  padding-right: clamp(40px, 5vw, 80px);
+  padding-top: 76px;
+  padding-bottom: 40px;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
   background: #ffffff;
+
+  box-sizing: border-box;
 }
 
 /* 화살표 + 게임 화면 전체 묶음 */
 .game-layout {
-  width: 100%;
+  position: relative;
 
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 
-  gap: clamp(36px, 5vw, 80px);
+  width: fit-content;
+  margin: 0 auto;
+
+  gap: 0;
+}
+
+/* 게임 화면 + 점 */
+.game-center {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* 좌우 화살표 */
 .game-side-arrow {
-  width: clamp(36px, 4vw, 56px);
-  height: clamp(36px, 4vw, 56px);
+  position: absolute;
+
+  /* 게임 화면 세로 중앙 근처 */
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: clamp(36px, calc(var(--safe-vw) * 4), 56px);
+  height: clamp(36px, calc(var(--safe-vw) * 4), 56px);
 
   display: flex;
   justify-content: center;
@@ -158,7 +181,7 @@ body {
   color: #111111;
   text-decoration: none;
 
-  font-size: clamp(42px, 4vw, 64px);
+  font-size: clamp(42px, calc(var(--safe-vw) * 4), 64px);
   font-weight: 300;
   line-height: 1;
 
@@ -167,8 +190,18 @@ body {
   transition: transform 0.2s ease;
 }
 
+/* 왼쪽 화살표: 게임 화면 기준 왼쪽으로 */
+.game-side-arrow:first-child {
+  left: calc(clamp(50px, calc(var(--safe-vw) * 6), 100px) * -1);
+}
+
+/* 오른쪽 화살표: 게임 화면 기준 오른쪽으로 */
+.game-side-arrow:last-child {
+  right: calc(clamp(50px, calc(var(--safe-vw) * 6), 100px) * -1);
+}
+
 .game-side-arrow:hover {
-  transform: scale(1.12);
+  transform: translateY(-50%) scale(1.12);
 }
 
 /* 게임 화면 + 점 */

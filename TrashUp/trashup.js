@@ -3,6 +3,9 @@
 // ====================================================
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+
+const trashUpBgmUrl = "../assets/sounds/SellBuyMusic - 니아.mp3";
+
 const screens = {
   start: document.getElementById("start-screen"),
   gameover: document.getElementById("game-over-screen"),
@@ -25,101 +28,101 @@ const baseHeight = 90,
   baseY = 650 - baseHeight / 2,
   baseWidth = 140;
 const trashDefs = [
-  {
-    key: "tissue",
-    id: "img-tissue",
-    name: "휴지",
-    w: 65,
-    h: 65,
-    weight: 0.6,
-    color: "#e8e8e8",
-  },
+  // {
+  //   key: "tissue",
+  //   id: "img-tissue",
+  //   name: "휴지",
+  //   w: 65,
+  //   h: 65,
+  //   weight: 0.6,
+  //   color: "#e8e8e8",
+  // },
   {
     key: "chopsticks",
     id: "img-chopsticks",
     name: "젓가락",
-    w: 160,
-    h: 25,
+    w: 200,
+    h: 35,
     weight: 0.5,
-    color: "#eadaa6",
+    // color: "#eadaa6",
   },
   {
     key: "butt",
     id: "img-butt",
     name: "꽁초",
-    w: 18,
-    h: 70,
+    w: 24,
+    h: 90,
     weight: 0.4,
-    color: "#ffb366",
+    // color: "#ffb366",
   },
   {
     key: "card",
     id: "img-card",
     name: "명함",
-    w: 80,
-    h: 50,
+    w: 90,
+    h: 60,
     weight: 0.5,
-    color: "#444444",
+    // color: "#444444",
   },
   {
     key: "snack",
     id: "img-snack",
     name: "라면땅",
-    w: 75,
-    h: 75,
+    w: 85,
+    h: 90,
     weight: 1.0,
-    color: "#ffcc66",
+    // color: "#ffcc66",
   },
   {
     key: "cundition",
     id: "img-cundition",
     name: "컨디션",
-    w: 30,
-    h: 70,
+    w: 50,
+    h: 110,
     weight: 1.2,
-    color: "#3366cc",
+    // color: "#3366cc",
   },
   {
     key: "welchs",
     id: "img-welchs",
     name: "웰치스",
-    w: 50,
-    h: 90,
+    w: 70,
+    h: 115,
     weight: 1.3,
-    color: "#663399",
+    // color: "#663399",
   },
   {
     key: "bottle",
     id: "img-bottle",
     name: "플라스틱병",
-    w: 110,
-    h: 55,
+    w: 170,
+    h: 75,
     weight: 0.8,
-    color: "#e6f7ff",
+    // color: "#e6f7ff",
   },
 ];
 
 // 이미지 로딩 체크 모니터링 센서
-function checkImages() {
-  let loaded = trashDefs.filter((d) => {
-    const img = document.getElementById(d.id);
-    return img && img.complete && img.naturalWidth !== 0;
-  }).length;
+// function checkImages() {
+//   let loaded = trashDefs.filter((d) => {
+//     const img = document.getElementById(d.id);
+//     return img && img.complete && img.naturalWidth !== 0;
+//   }).length;
 
-  const loadingTextEl = document.getElementById("loading-text");
-  if (loadingTextEl) {
-    loadingTextEl.innerHTML =
-      loaded < trashDefs.length
-        ? `로딩 중... (${loaded}/${trashDefs.length})`
-        : "화면 클릭 또는 Space bar로 시작";
-  }
-  if (loaded < trashDefs.length) setTimeout(checkImages, 200);
-}
-setTimeout(checkImages, 100);
-setTimeout(() => {
-  const loadingTextEl = document.getElementById("loading-text");
-  if (loadingTextEl) loadingTextEl.innerHTML = "준비 완료! 화면을 클릭하세요.";
-}, 2500);
+//   const loadingTextEl = document.getElementById("loading-text");
+//   if (loadingTextEl) {
+//     loadingTextEl.innerHTML =
+//       loaded < trashDefs.length
+//         ? `로딩 중... (${loaded}/${trashDefs.length})`
+//         : "[ 클릭하여 게임 시작하기 ]";
+//   }
+//   if (loaded < trashDefs.length) setTimeout(checkImages, 200);
+// }
+// setTimeout(checkImages, 100);
+// setTimeout(() => {
+//   const loadingTextEl = document.getElementById("loading-text");
+//   if (loadingTextEl) loadingTextEl.innerHTML = "[ 클릭하여 게임 시작하기 ]";
+// }, 2500);
 
 function init() {
   score = 0;
@@ -215,8 +218,14 @@ function update() {
             currentTrash.isFalling = false;
             currentTrash.angle = (currentTrash.x - top.x) * 0.002;
             stack.push(currentTrash);
+
+            if (window.AudioManager) {
+              AudioManager.playSfx("stack");
+            }
+
             score += 100;
             updateScore();
+            
             const cog = getTowerCOG();
             if (
               cog < stack[0].x - stack[0].w / 3 ||
@@ -238,6 +247,16 @@ function update() {
     }
   }
   animationId = requestAnimationFrame(update);
+}
+
+function drawStartPreview() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  stack.forEach(drawTrash);
+
+  if (currentTrash) {
+    drawTrash(currentTrash);
+  }
 }
 
 function drawTrash(item) {
@@ -298,18 +317,40 @@ function switchState(s) {
 }
 
 function startGame() {
+  if (animationId) {
+    cancelAnimationFrame(animationId);
+  }
+
   switchState("PLAYING");
-  if (screens.hud) screens.hud.style.display = "flex";
+
+  if (screens.hud) {
+    screens.hud.style.display = "flex";
+  }
+
+  if (window.AudioManager) {
+    AudioManager.playBgm(trashUpBgmUrl);
+  }
+
   init();
   update();
 }
+
 function gameOver() {
   switchState("GAMEOVER");
   cancelAnimationFrame(animationId);
+
+  if (window.AudioManager) {
+    AudioManager.pauseBgm();
+  }
+
   document.getElementById("final-score").innerText =
     `Score: ${String(score).padStart(6, "0")}`;
-  if (screens.gameover) screens.gameover.style.display = "flex";
+
+  if (screens.gameover) {
+    screens.gameover.style.display = "flex";
+  }
 }
+
 function togglePause() {
   if (state === "PLAYING") {
     switchState("PAUSED");
@@ -322,69 +363,152 @@ function togglePause() {
   }
 }
 
-document.getElementById("start-btn").addEventListener("click", (e) => {
-  e.stopPropagation();
-  startGame();
-});
-document.getElementById("resume-btn").addEventListener("click", (e) => {
-  e.stopPropagation();
-  togglePause();
-});
-document.getElementById("restart-btn").addEventListener("click", (e) => {
-  e.stopPropagation();
+// document.getElementById("start-btn").addEventListener("click", (e) => {
+//   e.stopPropagation();
+//   startGame();
+// });
+const gameContainer = document.getElementById("game-container");
+const resumeBtn = document.getElementById("resume-btn");
+const restartBtn = document.getElementById("restart-btn");
+const pauseBtn = document.getElementById("pause-btn");
+
+function restartGame() {
+  if (animationId) {
+    cancelAnimationFrame(animationId);
+  }
+
   switchState("PLAYING");
-  if (screens.hud) screens.hud.style.display = "flex";
+
+  if (screens.hud) {
+    screens.hud.style.display = "flex";
+  }
+
+  if (window.AudioManager) {
+    AudioManager.playBgm(trashUpBgmUrl);
+  }
+
   init();
   update();
-});
-document.getElementById("pause-btn").addEventListener("click", (e) => {
-  e.stopPropagation();
-  togglePause();
-});
+}
 
-document.getElementById("game-container").addEventListener("mousedown", (e) => {
-  if (
-    e.target.tagName.toLowerCase() === "button" ||
-    e.target.id === "pause-btn"
-  )
+function handleGameClick(e) {
+  if (e.target.tagName && e.target.tagName.toLowerCase() === "button") return;
+  if (e.target.id === "pause-btn") return;
+
+  if (state === "START") {
+    startGame();
     return;
-  if (state === "START") startGame();
-  else if (
+  }
+
+  if (
     state === "PLAYING" &&
     currentTrash &&
     !currentTrash.isFalling &&
     !isCollapsing
-  )
+  ) {
     currentTrash.isFalling = true;
-  else if (state === "GAMEOVER") {
-    switchState("PLAYING");
-    if (screens.hud) screens.hud.style.display = "flex";
-    init();
-    update();
+    return;
   }
-});
 
-window.addEventListener("keydown", (e) => {
-  if (e.code === "Space" || e.key === " " || e.keyCode === 32) {
-    e.preventDefault();
-    if (state === "START") startGame();
-    else if (
-      state === "PLAYING" &&
-      currentTrash &&
-      !currentTrash.isFalling &&
-      !isCollapsing
-    )
-      currentTrash.isFalling = true;
-    else if (state === "GAMEOVER") {
-      switchState("PLAYING");
-      if (screens.hud) screens.hud.style.display = "flex";
-      init();
-      update();
-    }
+  if (state === "GAMEOVER") {
+    restartGame();
   }
-  if (
-    (e.code === "KeyP" || e.code === "Escape") &&
-    (state === "PLAYING" || state === "PAUSED")
-  )
+}
+
+if (gameContainer) {
+  gameContainer.addEventListener("mousedown", handleGameClick);
+}
+
+if (screens.start) {
+  screens.start.addEventListener("mousedown", (e) => {
+    e.stopPropagation();
+
+    if (state === "START") {
+      startGame();
+    }
+  });
+}
+
+if (screens.pause) {
+  screens.pause.addEventListener("mousedown", (e) => {
+    e.stopPropagation();
+
+    if (state === "PAUSED") {
+      togglePause();
+    }
+  });
+}
+
+if (screens.gameover) {
+  screens.gameover.addEventListener("mousedown", (e) => {
+    e.stopPropagation();
+
+    if (state === "GAMEOVER") {
+      restartGame();
+    }
+  });
+}
+
+if (resumeBtn) {
+  resumeBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
     togglePause();
-});
+  });
+}
+
+if (restartBtn) {
+  restartBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    restartGame();
+  });
+}
+
+if (pauseBtn) {
+  pauseBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    togglePause();
+  });
+}
+
+// window.addEventListener("keydown", (e) => {
+//   if (e.code === "Space" || e.key === " " || e.keyCode === 32) {
+//     e.preventDefault();
+//     if (state === "START") startGame();
+//     else if (
+//       state === "PLAYING" &&
+//       currentTrash &&
+//       !currentTrash.isFalling &&
+//       !isCollapsing
+//     )
+//       currentTrash.isFalling = true;
+//     else if (state === "GAMEOVER") {
+//       switchState("PLAYING");
+//       if (screens.hud) screens.hud.style.display = "flex";
+//       init();
+//       update();
+//     }
+//   }
+//   if (
+//     (e.code === "KeyP" || e.code === "Escape") &&
+//     (state === "PLAYING" || state === "PAUSED")
+//   )
+//     togglePause();
+// });
+init();
+drawStartPreview();
+
+if (screens.start) {
+  screens.start.style.display = "flex";
+}
+
+if (screens.pause) {
+  screens.pause.style.display = "none";
+}
+
+if (screens.gameover) {
+  screens.gameover.style.display = "none";
+}
+
+if (screens.hud) {
+  screens.hud.style.display = "none";
+}

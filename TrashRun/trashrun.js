@@ -1,6 +1,8 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-const bgmSoundUrl = "../assets/sounds/trashsound.wav";
+
+const bgmSoundUrl = "../assets/sounds/SellBuyMusic - 뒤뚱뒤뚱.mp3";
+// const bgmSoundUrl = "../assets/sounds/trashsound.wav";
 
 // 캐릭터 이미지 불러오기
 const playerImage = new Image();
@@ -312,7 +314,7 @@ function drawUI() {
   ctx.font = '400 12px "Pretendard", sans-serif';
   ctx.textAlign = "center";
   let paddedScore = String(Math.floor(score)).padStart(6, "0");
-  ctx.fillText(`Score: ${paddedScore}`, canvas.width / 2, scoreBoxY + 21);
+  ctx.fillText(`점수: ${paddedScore}`, canvas.width / 2, scoreBoxY + 21);
 
   // 바닥
   // ctx.fillStyle = "#f0f0f0";
@@ -327,7 +329,7 @@ function drawUI() {
     ctx.fillStyle = "rgba(255,255,255,0.4)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#000000";
-     ctx.font = '700 18px "Pretendard", sans-serif';
+     ctx.font = '800 16px "Pretendard", sans-serif';
     ctx.textAlign = "center";
 
     ctx.fillText(
@@ -336,27 +338,27 @@ function drawUI() {
       canvas.height / 2,
     );
   } else if (gameResult === "GAMEOVER") {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
+    // ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const boxWidth = 240;
-    const boxHeight = 80;
-    const boxX = canvas.width / 2 - boxWidth / 2;
-    const boxY = canvas.height / 2 - boxHeight / 2;
+    // const boxWidth = 240;
+    // const boxHeight = 80;
+    // const boxX = canvas.width / 2 - boxWidth / 2;
+    // const boxY = canvas.height / 2 - boxHeight / 2;
+
+    // ctx.fillStyle = "#000000";
+    // ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+
+    // ctx.strokeStyle = "#ffffff";
+    // ctx.strokeRect(boxX + 5, boxY + 5, boxWidth - 10, boxHeight - 10);
 
     ctx.fillStyle = "#000000";
-    ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
-
-    ctx.strokeStyle = "#ffffff";
-    ctx.strokeRect(boxX + 5, boxY + 5, boxWidth - 10, boxHeight - 10);
-
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 18px sans-serif";
+    ctx.font = "800 20px sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2 - 5);
-    ctx.font = "12px sans-serif";
+    ctx.fillText("게임 오버", canvas.width / 2, canvas.height / 2 - 5);
+    ctx.font = "800 16px sans-serif";
     ctx.fillText(
-      "다시 시작하려면 클릭",
+      "[ 클릭하여 다시시작하기 ]",
       canvas.width / 2,
       canvas.height / 2 + 20,
     );

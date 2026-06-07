@@ -128,35 +128,133 @@ scrollPhotoSections.forEach((section) => {
   photoObserver.observe(section);
 });
 
-// 첫화면에서 조금만스크롤해도 소개부분으로
-let isAtParticleTop = true;
-let isScrollMoving = false;
+// 파티클 첫 화면 → 01 소개 섹션으로 부드럽게 이동
+let isIntroAutoScrolling = false;
 
+//애니메이션 시간 조절 600 = 0.6초
+function smoothScrollTo(targetY, duration = 600) {
+  const startY = window.scrollY || document.documentElement.scrollTop;
+  const distance = targetY - startY;
+  const startTime = performance.now();
+
+  function easeInOutCubic(t) {
+    if (t < 0.5) {
+      return 4 * t * t * t;
+    } else {
+      return 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+  }
+
+  function animate(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const easedProgress = easeInOutCubic(progress);
+
+    window.scrollTo(0, startY + distance * easedProgress);
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      isIntroAutoScrolling = false;
+    }
+  }
+
+  requestAnimationFrame(animate);
+}
+
+function moveToIntroStart() {
+  const introStart = document.getElementById("intro-start");
+  const navbar = document.querySelector(".navbar");
+
+  if (!introStart) {
+    console.log("intro-start를 찾을 수 없음");
+    return;
+  }
+
+  if (isIntroAutoScrolling) return;
+
+  isIntroAutoScrolling = true;
+
+  const navbarHeight = navbar ? navbar.offsetHeight : 0;
+
+  const targetY =
+    introStart.getBoundingClientRect().top +
+    window.pageYOffset -
+    navbarHeight;
+//스크롤 속도 조절
+  smoothScrollTo(targetY, 600);
+}
+
+// 메뉴바 '소개' 버튼 클릭 시 부드럽게 이동
+const introNavLinks = document.querySelectorAll('a[href="#intro-start"]');
+
+introNavLinks.forEach((link) => {
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    moveToIntroStart();
+  });
+});
+
+// 첫 파티클 화면에서 휠 살짝 내리면 01 소개로 이동
 window.addEventListener(
   "wheel",
   (event) => {
-    if (isScrollMoving) return;
-
     const currentScrollTop =
-      window.pageYOffset || document.documentElement.scrollTop;
+      window.scrollY || document.documentElement.scrollTop;
 
-    const introStart = document.getElementById("intro-start");
+    if (isIntroAutoScrolling) return;
 
-    if (!introStart) return;
-
-    if (currentScrollTop < 10 && event.deltaY > 0) {
-      isScrollMoving = true;
-      isAtParticleTop = false;
-
-      introStart.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-
-      setTimeout(() => {
-        isScrollMoving = false;
-      }, 900);
+    if (currentScrollTop < 50 && event.deltaY > 0) {
+      event.preventDefault();
+      moveToIntroStart();
     }
   },
-  { passive: true },
+  { passive: false }
 );
+
+// 책 미리보기 페이지 넘기기
+const bookPreviewPages = [
+  "./assets/images/preview01.jpg",
+  "./assets/images/preview02.jpg",
+  "./assets/images/preview03.jpg",
+  "./assets/images/preview04.jpg",
+  "./assets/images/preview05.jpg",
+  "./assets/images/preview06.jpg",
+];
+
+let bookPreviewIndex = 0;
+
+const bookPreviewImage = document.getElementById("bookPreviewImage");
+const bookPreviewPrev = document.querySelector(".book-preview-prev");
+const bookPreviewNext = document.querySelector(".book-preview-next");
+
+function changeBookPreviewPage(direction) {
+  if (!bookPreviewImage) return;
+
+  bookPreviewIndex += direction;
+
+  if (bookPreviewIndex < 0) {
+    bookPreviewIndex = bookPreviewPages.length - 1;
+  } else if (bookPreviewIndex >= bookPreviewPages.length) {
+    bookPreviewIndex = 0;
+  }
+
+  bookPreviewImage.style.opacity = 0;
+
+  setTimeout(() => {
+    bookPreviewImage.src = bookPreviewPages[bookPreviewIndex];
+    bookPreviewImage.style.opacity = 1;
+  }, 150);
+}
+
+if (bookPreviewPrev) {
+  bookPreviewPrev.addEventListener("click", () => {
+    changeBookPreviewPage(-1);
+  });
+}
+
+if (bookPreviewNext) {
+  bookPreviewNext.addEventListener("click", () => {
+    changeBookPreviewPage(1);
+  });
+}

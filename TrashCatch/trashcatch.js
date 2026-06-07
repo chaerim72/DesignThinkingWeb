@@ -1,6 +1,8 @@
 const gameCanvas = document.getElementById("gameCanvas");
 const gameCtx = gameCanvas.getContext("2d");
 
+const trashCatchBgmUrl = "../assets/sounds/SellBuyMusic - 푸드 파이터.mp3";
+
 let gameScore = 0;
 const scoreDisplay = document.getElementById("score");
 
@@ -128,6 +130,10 @@ function initAndStartGame() {
       gameLevel++;
       levelDisplay.textContent = gameLevel;
       levelUpTimer = 60;
+
+      if (window.AudioManager) {
+      AudioManager.playSfx("levelup");
+      } 
     }
   }, 1000);
 }
@@ -164,15 +170,25 @@ gameCanvas.addEventListener("click", (event) => {
   const clickY = (event.clientY - rect.top) * (gameCanvas.height / rect.height);
 
   if (!isFirstClickToStart) {
-    isFirstClickToStart = true;
-    initAndStartGame();
-    return;
+  isFirstClickToStart = true;
+  initAndStartGame();
+
+  if (window.AudioManager) {
+    AudioManager.playBgm(trashCatchBgmUrl);
   }
 
+  return;
+}
+
   if (isGameOver) {
-    initAndStartGame();
-    return;
+  initAndStartGame();
+
+  if (window.AudioManager) {
+    AudioManager.playBgm(trashCatchBgmUrl);
   }
+
+  return;
+}
 
   if (clickX >= 360 && clickX <= 390 && clickY >= 10 && clickY <= 35) {
     isGamePaused = !isGamePaused;
@@ -279,6 +295,10 @@ function updateAndDrawTrashItems() {
       gameScore += 10;
       scoreDisplay.textContent = gameScore;
 
+      if (window.AudioManager) {
+        AudioManager.playSfx("catch");
+      }
+
       continue;
     }
 
@@ -292,35 +312,34 @@ function updateAndDrawTrashItems() {
       if (gameLives <= 0) {
         isGameOver = true;
         checkHighScore();
+
+        if (window.AudioManager) {
+          AudioManager.pauseBgm();
+        }
       }
     }
   }
 }
 
-function drawStartScreen() {
+function drawStartOverlay() {
+  gameCtx.fillStyle = "rgba(255, 255, 255, 0.45)";
+  gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+
   gameCtx.fillStyle = "#000000";
-  gameCtx.font = "700 26px 'Pretendard', sans-serif";
+  gameCtx.font = '700 16px "Pretendard", sans-serif';
   gameCtx.textAlign = "center";
+
   gameCtx.fillText(
-    "쓰레기 담기",
+    "마우스로 움직여 쓰레기를 담으세요",
     gameCanvas.width / 2,
-    gameCanvas.height / 2 - 30,
+    gameCanvas.height / 2 - 14
   );
 
-  gameCtx.font = "500 14px 'Pretendard', sans-serif";
-  gameCtx.fillStyle = "#555555";
+  gameCtx.font = '700 18px "Pretendard", sans-serif';
   gameCtx.fillText(
-    "마우스를 움직여 안서동의 파편들을 수거하세요.",
+    "[ 클릭하여 게임 시작하기 ]",
     gameCanvas.width / 2,
-    gameCanvas.height / 2 + 10,
-  );
-
-  gameCtx.font = "700 13px 'Pretendard', sans-serif";
-  gameCtx.fillStyle = "#000000";
-  gameCtx.fillText(
-    "[CLICK SCREEN TO START]",
-    gameCanvas.width / 2,
-    gameCanvas.height / 2 + 50,
+    gameCanvas.height / 2 + 18
   );
 }
 
@@ -329,14 +348,14 @@ function drawGameOverScreen() {
   gameCtx.font = "700 28px 'Pretendard', sans-serif";
   gameCtx.textAlign = "center";
   gameCtx.fillText(
-    "GAME OVER",
+    "게임 오버",
     gameCanvas.width / 2,
     gameCanvas.height / 2 - 20,
   );
 
   gameCtx.font = "600 13px 'Pretendard', sans-serif";
   gameCtx.fillText(
-    "[CLICK TO RESTART]",
+    "[ 클릭하여 게임 재시작하기 ]",
     gameCanvas.width / 2,
     gameCanvas.height / 2 + 20,
   );
@@ -349,11 +368,11 @@ function drawPausedScreen() {
   gameCtx.fillStyle = "#000000";
   gameCtx.font = "700 28px 'Pretendard', sans-serif";
   gameCtx.textAlign = "center";
-  gameCtx.fillText("PAUSED", gameCanvas.width / 2, gameCanvas.height / 2 - 10);
+  gameCtx.fillText("일시 정지", gameCanvas.width / 2, gameCanvas.height / 2 - 10);
 
   gameCtx.font = "600 13px 'Pretendard', sans-serif";
   gameCtx.fillText(
-    "(Click button to resume)",
+    "[ 클릭하여 게임 재시작하기 ]",
     gameCanvas.width / 2,
     gameCanvas.height / 2 + 20,
   );
@@ -367,7 +386,7 @@ function drawLevelUpText() {
 
     if (levelUpTimer % 10 > 3) {
       gameCtx.fillText(
-        `LEVEL ${gameLevel}!`,
+        `레벨업! LV:${gameLevel}`,
         gameCanvas.width / 2,
         gameCanvas.height / 2 - 80,
       );
@@ -380,16 +399,17 @@ function drawLevelUpText() {
 function runGameLoop() {
   gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
+  drawInGameLeaderboard();
+  drawPauseButton();
+  drawPlayerBasket();
+
   if (!isFirstClickToStart) {
-    drawStartScreen();
+    drawStartOverlay();
   } else if (isGameOver) {
     drawGameOverScreen();
   } else if (isGamePaused) {
     drawPausedScreen();
   } else {
-    drawInGameLeaderboard();
-    drawPauseButton();
-    drawPlayerBasket();
     updateAndDrawTrashItems();
     drawLevelUpText();
   }
