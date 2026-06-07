@@ -169,29 +169,71 @@ gameCanvas.addEventListener("click", (event) => {
   const clickX = (event.clientX - rect.left) * (gameCanvas.width / rect.width);
   const clickY = (event.clientY - rect.top) * (gameCanvas.height / rect.height);
 
-  if (!isFirstClickToStart) {
-  isFirstClickToStart = true;
-  initAndStartGame();
-
-  if (window.AudioManager) {
-    AudioManager.playBgm(trashCatchBgmUrl);
+  // 소리 아이콘 클릭
+  if (clickX >= 326 && clickX <= 356 && clickY >= 8 && clickY <= 40) {
+    if (window.AudioManager) {
+      AudioManager.toggleMute();
+    }
+    return;
   }
 
-  return;
-}
+  // 일시정지 버튼 클릭
+  if (clickX >= 360 && clickX <= 390 && clickY >= 8 && clickY <= 40) {
+    if (!isFirstClickToStart || isGameOver) return;
 
-  if (isGameOver) {
-  initAndStartGame();
+    if (window.AudioManager) {
+      AudioManager.playButtonSfx();
+    }
 
-  if (window.AudioManager) {
-    AudioManager.playBgm(trashCatchBgmUrl);
-  }
-
-  return;
-}
-
-  if (clickX >= 360 && clickX <= 390 && clickY >= 10 && clickY <= 35) {
     isGamePaused = !isGamePaused;
+
+    if (window.AudioManager) {
+      if (isGamePaused) {
+        AudioManager.pauseBgm();
+      } else {
+        AudioManager.playBgm(trashCatchBgmUrl);
+      }
+    }
+
+    return;
+  }
+
+  // 시작 전 클릭
+  if (!isFirstClickToStart) {
+    isFirstClickToStart = true;
+    initAndStartGame();
+
+    if (window.AudioManager) {
+      AudioManager.playBgm(trashCatchBgmUrl);
+    }
+
+    return;
+  }
+
+  // 게임오버 후 클릭
+  if (isGameOver) {
+    initAndStartGame();
+
+    if (window.AudioManager) {
+      AudioManager.playBgm(trashCatchBgmUrl);
+    }
+
+    return;
+  }
+
+  // 일시정지 상태에서는 화면 아무 곳 클릭하면 계속하기
+  if (isGamePaused) {
+    if (window.AudioManager) {
+      AudioManager.playButtonSfx();
+    }
+
+    isGamePaused = false;
+
+    if (window.AudioManager) {
+      AudioManager.playBgm(trashCatchBgmUrl);
+    }
+
+    return;
   }
 });
 
@@ -222,12 +264,36 @@ function drawInGameLeaderboard() {
   gameCtx.restore();
 }
 
-function drawPauseButton() {
+function drawControlIcons() {
   gameCtx.save();
 
+  gameCtx.fillStyle = "#4a4a4a";
+  gameCtx.font = '16px "Pretendard", sans-serif';
+  gameCtx.textAlign = "center";
+  gameCtx.textBaseline = "middle";
+
+  const soundIcon =
+    window.AudioManager && AudioManager.isMuted()
+      ? "🔇"
+      : "🔊";
+
+  gameCtx.fillText(soundIcon, 342, 24);
+
   gameCtx.fillStyle = "#000000";
-  gameCtx.fillRect(368, 15, 4, 14);
-  gameCtx.fillRect(376, 15, 4, 14);
+
+  if (isGamePaused) {
+    // 재생 아이콘
+    gameCtx.beginPath();
+    gameCtx.moveTo(370, 16);
+    gameCtx.lineTo(370, 32);
+    gameCtx.lineTo(383, 24);
+    gameCtx.closePath();
+    gameCtx.fill();
+  } else {
+    // 일시정지 아이콘
+    gameCtx.fillRect(368, 16, 4, 14);
+    gameCtx.fillRect(376, 16, 4, 14);
+  }
 
   gameCtx.restore();
 }
@@ -268,11 +334,13 @@ function drawPlayerBasket() {
   gameCtx.restore();
 }
 
-function updateAndDrawTrashItems() {
+function updateAndDrawTrashItems(shouldUpdate = true) {
   for (let i = 0; i < gameItems.length; i++) {
     const item = gameItems[i];
 
-    item.y += item.speed;
+    if (shouldUpdate) {
+      item.y += item.speed;
+    }
 
     const img = trashImages[item.type];
 
@@ -280,6 +348,10 @@ function updateAndDrawTrashItems() {
       const aspectRatio = img.naturalHeight / img.naturalWidth;
       item.height = item.width * aspectRatio;
       gameCtx.drawImage(img, item.x, item.y, item.width, item.height);
+    }
+
+    if (!shouldUpdate) {
+      continue;
     }
 
     const isColliding =
@@ -314,6 +386,7 @@ function updateAndDrawTrashItems() {
         checkHighScore();
 
         if (window.AudioManager) {
+          AudioManager.playSfx("gameover");
           AudioManager.pauseBgm();
         }
       }
@@ -362,8 +435,8 @@ function drawGameOverScreen() {
 }
 
 function drawPausedScreen() {
-  drawInGameLeaderboard();
-  drawPauseButton();
+  gameCtx.fillStyle = "rgba(255, 255, 255, 0.45)";
+  gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
   gameCtx.fillStyle = "#000000";
   gameCtx.font = "700 28px 'Pretendard', sans-serif";
@@ -372,9 +445,9 @@ function drawPausedScreen() {
 
   gameCtx.font = "600 13px 'Pretendard', sans-serif";
   gameCtx.fillText(
-    "[ 클릭하여 게임 재시작하기 ]",
+    "[ 클릭하여 계속하기 ]",
     gameCanvas.width / 2,
-    gameCanvas.height / 2 + 20,
+    gameCanvas.height / 2 + 20
   );
 }
 
@@ -400,7 +473,7 @@ function runGameLoop() {
   gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
   drawInGameLeaderboard();
-  drawPauseButton();
+  drawControlIcons();
   drawPlayerBasket();
 
   if (!isFirstClickToStart) {
@@ -408,9 +481,10 @@ function runGameLoop() {
   } else if (isGameOver) {
     drawGameOverScreen();
   } else if (isGamePaused) {
+    updateAndDrawTrashItems(false);
     drawPausedScreen();
   } else {
-    updateAndDrawTrashItems();
+    updateAndDrawTrashItems(true);
     drawLevelUpText();
   }
 

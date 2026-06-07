@@ -10,22 +10,42 @@ playerImage.src = "../assets/images/쓰레기런_캐릭터기본.png";
 
 // 장애물 이미지 불러오기
 const obstacleImage1 = new Image();
-obstacleImage1.src = "../assets/images/trash-catch-02.png";
+obstacleImage1.src = "../assets/images/쓰레기런_담뱃갑.png/";
 
 const obstacleImage2 = new Image();
-obstacleImage2.src = "../assets/images/trash-catch-01.png";
+obstacleImage2.src = "../assets/images/쓰레기런_몬스터.png";
 
 const obstacleImage3 = new Image();
-obstacleImage3.src = "../assets/images/trash-catch-03.png";
+obstacleImage3.src = "../assets/images/쓰레기런_바나나.png.png";
 
 const obstacleImage4 = new Image();
-obstacleImage4.src = "../assets/images/bottle.png";
+obstacleImage4.src = "../assets/images/쓰레기런_사과.png";
+
+const obstacleImage5 = new Image();
+obstacleImage4.src = "../assets/images/쓰레기런_쓰레기봉투.png";
+
+const obstacleImage6 = new Image();
+obstacleImage4.src = "../assets/images/쓰레기런_양파링.png";
+
+const obstacleImage7 = new Image();
+obstacleImage4.src = "../assets/images/쓰레기런_초콜릿.png";
+
+const obstacleImage8 = new Image();
+obstacleImage4.src = "../assets/images/쓰레기런_커피컵.png";
+
+const obstacleImage9 = new Image();
+obstacleImage4.src = "../assets/images/쓰레기런_토레타.png";
 
 const obstacleImages = [
   obstacleImage1,
   obstacleImage2,
   obstacleImage3,
   obstacleImage4,
+  obstacleImage5,
+  obstacleImage6,
+  obstacleImage7,
+  obstacleImage8,
+  obstacleImage9,
 ];
 
 //배경이미지 불러오기
@@ -64,6 +84,7 @@ let obstacles = [];
 let frameCount = 0;
 let nextObstacleFrame = 45; // 첫 장애물 등장 타이밍을 당김
 let isMousePressed = false;
+let isGamePaused = false;
 
 function startBgm() {
   if (window.AudioManager) {
@@ -173,13 +194,23 @@ class Obstacle {
 
     // 이미지별 기준 높이만 지정
     if (this.type === 0) {
-      this.height = 54;
+      this.height = 50;
     } else if (this.type === 1) {
       this.height = 56;
     } else if (this.type === 2) {
-      this.height = 72;
+      this.height = 50;
+    } else if (this.type === 3) {
+      this.height = 50;
+    } else if (this.type === 4) {
+      this.height = 50;
+    } else if (this.type === 5) {
+      this.height = 50;
+    } else if (this.type === 6) {
+      this.height = 50;
+    } else if (this.type === 7) {
+      this.height = 50;
     } else {
-      this.height = 40;
+      this.height = 50;
     }
 
     // 일단 임시 width
@@ -291,14 +322,6 @@ function drawMovingBackground() {
 }
 
 function drawUI() {
-  // 바닥
-  // ctx.strokeStyle = "#7f7f7f";
-  // ctx.lineWidth = 2;
-  // ctx.beginPath();
-  // ctx.moveTo(0, 420);
-  // ctx.lineTo(canvas.width, 420);
-  // ctx.stroke();
-
   const scoreBoxWidth = 140;
   const scoreBoxHeight = 32;
   const scoreBoxX = canvas.width / 2 - scoreBoxWidth / 2;
@@ -316,51 +339,90 @@ function drawUI() {
   let paddedScore = String(Math.floor(score)).padStart(6, "0");
   ctx.fillText(`점수: ${paddedScore}`, canvas.width / 2, scoreBoxY + 21);
 
-  // 바닥
-  // ctx.fillStyle = "#f0f0f0";
-  // ctx.fillRect(0, 421, canvas.width, canvas.height - 421);
+  // 우측 상단 아이콘
+  ctx.fillStyle = "#4a4a4a";
+  ctx.font = '16px "Pretendard", sans-serif';
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  const soundIcon =
+    window.AudioManager && AudioManager.isMuted()
+      ? "🔇"
+      : "🔊";
+
+  ctx.fillText(soundIcon, canvas.width - 64, 36);
 
   ctx.fillStyle = "#4a4a4a";
-  ctx.font = "16px sans-serif";
-  ctx.textAlign = "right";
-  ctx.fillText("🔊  ▶", canvas.width - 40, 46);
+
+  if (gameResult === "PAUSED") {
+    // 재생 아이콘
+    ctx.beginPath();
+    ctx.moveTo(canvas.width - 44, 27);
+    ctx.lineTo(canvas.width - 44, 45);
+    ctx.lineTo(canvas.width - 30, 36);
+    ctx.closePath();
+    ctx.fill();
+  } else {
+    // 일시정지 아이콘
+    ctx.fillRect(canvas.width - 45, 28, 4, 16);
+    ctx.fillRect(canvas.width - 37, 28, 4, 16);
+  }
+
+  ctx.textBaseline = "alphabetic";
 
   if (gameResult === "READY") {
     ctx.fillStyle = "rgba(255,255,255,0.4)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
     ctx.fillStyle = "#000000";
-     ctx.font = '800 16px "Pretendard", sans-serif';
+    ctx.font = '800 16px "Pretendard", sans-serif';
     ctx.textAlign = "center";
 
     ctx.fillText(
       "[ 클릭하여 게임 시작하기 ]",
       canvas.width / 2,
-      canvas.height / 2,
+      canvas.height / 2
     );
-  } else if (gameResult === "GAMEOVER") {
-    // ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
-    // ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // const boxWidth = 240;
-    // const boxHeight = 80;
-    // const boxX = canvas.width / 2 - boxWidth / 2;
-    // const boxY = canvas.height / 2 - boxHeight / 2;
-
-    // ctx.fillStyle = "#000000";
-    // ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
-
-    // ctx.strokeStyle = "#ffffff";
-    // ctx.strokeRect(boxX + 5, boxY + 5, boxWidth - 10, boxHeight - 10);
+  } else if (gameResult === "PAUSED") {
+    ctx.fillStyle = "rgba(255,255,255,0.45)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = "#000000";
-    ctx.font = "800 20px sans-serif";
+    ctx.font = '700 28px "Pretendard", sans-serif';
     ctx.textAlign = "center";
-    ctx.fillText("게임 오버", canvas.width / 2, canvas.height / 2 - 5);
-    ctx.font = "800 16px sans-serif";
+    ctx.fillText("일시 정지", canvas.width / 2, canvas.height / 2 - 10);
+
+    ctx.font = '600 13px "Pretendard", sans-serif';
     ctx.fillText(
-      "[ 클릭하여 다시시작하기 ]",
+      "[ 클릭하여 계속하기 ]",
       canvas.width / 2,
-      canvas.height / 2 + 20,
+      canvas.height / 2 + 20
+    );
+  } else if (gameResult === "GAMEOVER") {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const boxWidth = 240;
+    const boxHeight = 80;
+    const boxX = canvas.width / 2 - boxWidth / 2;
+    const boxY = canvas.height / 2 - boxHeight / 2;
+
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+
+    ctx.strokeStyle = "#ffffff";
+    ctx.strokeRect(boxX + 5, boxY + 5, boxWidth - 10, boxHeight - 10);
+
+    ctx.fillStyle = "#ffffff";
+    ctx.font = '700 18px "Pretendard", sans-serif';
+    ctx.textAlign = "center";
+    ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2 - 5);
+
+    ctx.font = '400 12px "Pretendard", sans-serif';
+    ctx.fillText(
+      "다시 시작하려면 클릭",
+      canvas.width / 2,
+      canvas.height / 2 + 20
     );
   }
 }
@@ -425,8 +487,13 @@ function gameLoop() {
     if (gameResult === "RUNNING") obstacles[i].update();
     obstacles[i].draw();
 
-    if (checkCollision(player, obstacles[i])) {
+    if (gameResult === "RUNNING" && checkCollision(player, obstacles[i])) {
       gameResult = "GAMEOVER";
+
+      if (window.AudioManager) {
+        AudioManager.playSfx("gameover");
+      }
+
       pauseBgm();
     }
 
@@ -442,8 +509,61 @@ function gameLoop() {
 }
 
 window.addEventListener("mousedown", (e) => {
-  if (e.target.closest(".navbar") || e.target.closest(".game-side-arrow"))
+  if (e.target.closest(".navbar") || e.target.closest(".game-side-arrow")) {
     return;
+  }
+
+  const rect = canvas.getBoundingClientRect();
+  const clickX = (e.clientX - rect.left) * (canvas.width / rect.width);
+  const clickY = (e.clientY - rect.top) * (canvas.height / rect.height);
+
+  // 소리 아이콘 클릭
+  if (
+    clickX >= canvas.width - 82 &&
+    clickX <= canvas.width - 50 &&
+    clickY >= 20 &&
+    clickY <= 52
+  ) {
+    if (window.AudioManager) {
+      AudioManager.toggleMute();
+    }
+    return;
+  }
+
+  // 일시정지 / 재생 아이콘 클릭
+  if (
+    clickX >= canvas.width - 52 &&
+    clickX <= canvas.width - 20 &&
+    clickY >= 20 &&
+    clickY <= 52
+  ) {
+    if (window.AudioManager) {
+      AudioManager.playButtonSfx();
+    }
+
+    if (gameResult === "RUNNING") {
+      gameResult = "PAUSED";
+      isMousePressed = false;
+      pauseBgm();
+    } else if (gameResult === "PAUSED") {
+      gameResult = "RUNNING";
+      startBgm();
+    }
+
+    return;
+  }
+
+  // 일시정지 화면에서는 화면 아무 곳 클릭하면 계속하기
+  if (gameResult === "PAUSED") {
+    if (window.AudioManager) {
+      AudioManager.playButtonSfx();
+    }
+
+    gameResult = "RUNNING";
+    startBgm();
+    return;
+  }
+
   isMousePressed = true;
 
   if (gameResult === "READY") {
@@ -454,7 +574,6 @@ window.addEventListener("mousedown", (e) => {
     player.isGrounded = false;
     playJumpSfx();
   } else if (gameResult === "GAMEOVER") {
-    // click 이벤트와 분리하지 않고 mousedown 시점에 단 한 번만 리셋하여 렉 발생을 원천 차단
     resetGame();
     startBgm();
   }

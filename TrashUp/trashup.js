@@ -340,6 +340,7 @@ function gameOver() {
   cancelAnimationFrame(animationId);
 
   if (window.AudioManager) {
+    AudioManager.playSfx("gameover");
     AudioManager.pauseBgm();
   }
 
@@ -355,10 +356,25 @@ function togglePause() {
   if (state === "PLAYING") {
     switchState("PAUSED");
     cancelAnimationFrame(animationId);
-    if (screens.pause) screens.pause.style.display = "flex";
+
+    if (window.AudioManager) {
+      AudioManager.pauseBgm();
+    }
+
+    if (screens.pause) {
+      screens.pause.style.display = "flex";
+    }
   } else if (state === "PAUSED") {
     switchState("PLAYING");
-    if (screens.hud) screens.hud.style.display = "flex";
+
+    if (screens.hud) {
+      screens.hud.style.display = "flex";
+    }
+
+    if (window.AudioManager) {
+      AudioManager.playBgm(trashUpBgmUrl);
+    }
+
     update();
   }
 }
@@ -371,6 +387,27 @@ const gameContainer = document.getElementById("game-container");
 const resumeBtn = document.getElementById("resume-btn");
 const restartBtn = document.getElementById("restart-btn");
 const pauseBtn = document.getElementById("pause-btn");
+const soundBtn = document.getElementById("sound-btn");
+
+function updateSoundIcon() {
+  if (!soundBtn) return;
+
+  soundBtn.textContent =
+    window.AudioManager && AudioManager.isMuted()
+      ? "🔇"
+      : "🔊";
+}
+
+if (soundBtn) {
+  soundBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    if (window.AudioManager) {
+      AudioManager.toggleMute();
+      updateSoundIcon();
+    }
+  });
+}
 
 function restartGame() {
   if (animationId) {
@@ -434,6 +471,10 @@ if (screens.pause) {
     e.stopPropagation();
 
     if (state === "PAUSED") {
+      if (window.AudioManager) {
+        AudioManager.playButtonSfx();
+      }
+
       togglePause();
     }
   });
@@ -466,6 +507,11 @@ if (restartBtn) {
 if (pauseBtn) {
   pauseBtn.addEventListener("click", (e) => {
     e.stopPropagation();
+
+    if (window.AudioManager) {
+      AudioManager.playButtonSfx();
+    }
+
     togglePause();
   });
 }
@@ -496,6 +542,7 @@ if (pauseBtn) {
 // });
 init();
 drawStartPreview();
+updateSoundIcon();
 
 if (screens.start) {
   screens.start.style.display = "flex";
