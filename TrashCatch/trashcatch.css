@@ -45,7 +45,7 @@ body {
 /* 상단 UI 보드 */
 .trashcatch-page #ui-board {
   width: var(--trashcatch-width);
-  background-color: #ffffff;
+  background-color: transparent;
   color: #000000;
 
   padding: 14px 18px;
@@ -80,13 +80,11 @@ body {
 .trashcatch-page #gameCanvas {
   width: var(--trashcatch-width);
   height: auto;
-  aspect-ratio: 400 / 600;
+  aspect-ratio: 400 / 680;
 
   background-color: #ffffff;
   display: block;
 
   border: 2px solid #a0a0a0;
-  border-top: none;
-
   box-sizing: border-box;
 }

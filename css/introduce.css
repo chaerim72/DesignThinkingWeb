@@ -978,3 +978,178 @@ html {
 .footer-about p {
   white-space: nowrap;
 }
+
+/* 01 시작 섹션 다크모드 */
+body.dark-mode #intro-start {
+  background-color: #111111;
+  color: #ffffff;
+}
+
+body.dark-mode #intro-start * {
+  color: #ffffff;
+}
+
+body.dark-mode #intro-start .chapter-inner,
+body.dark-mode #intro-start .intro-text,
+body.dark-mode #intro-start .chapter-content {
+  background-color: transparent;
+}
+
+body.dark-mode .introduce-page {
+  border-top-color: #ffffff;
+}
+
+/* 다크모드: 소개 페이지 격자 배경 구간 */
+body.dark-mode .grid-area {
+  background-color: #111111;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+}
+
+/* 본문 카드 박스 */
+body.dark-mode .body-card {
+  background: #111111;
+  border-color: #ffffff;
+  box-shadow: 9px 9px 0 #ffffff;
+  color: #ffffff;
+}
+
+/* 카드 안 본문 글자 */
+body.dark-mode .body-card p {
+  color: #ffffff;
+}
+
+/* 카드1 위 제목카드 */
+body.dark-mode .body-card-label {
+  background: #ffffff;
+  color: #000000;
+}
+
+/* WHY 글씨 */
+body.dark-mode .why-title {
+  color: #ffffff;
+}
+
+/* 챕터 02 글씨 */
+body.dark-mode .chapter-two-number,
+body.dark-mode .chapter-two-title,
+body.dark-mode .chapter-two-desc {
+  color: #ffffff;
+}
+
+/* 지도 이미지 박스 배경 */
+body.dark-mode .chapter-two-map-wrap {
+  background: #111111;
+}
+
+/* 지도 이미지 스트로크 */
+body.dark-mode .chapter-two-map {
+  border-color: transparent;
+}
+
+/* 지도 호버 인포 박스 */
+body.dark-mode .map-info-box {
+  background-color: rgba(17, 17, 17, 0.98);
+  border: transparent;
+  box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.28);
+}
+
+body.dark-mode .map-info-title {
+  color: #ffffff;
+  border-bottom: 1px solid #ffffff;
+}
+
+body.dark-mode .map-info-content {
+  color: #ffffff;
+}
+
+/* DARK MODE - 지역별 슬라이드 */
+body.dark-mode .district-image {
+  border: transparent;
+}
+
+body.dark-mode .district-text,
+body.dark-mode .district-text * {
+  color: #ffffff;
+}
+
+body.dark-mode .district-chapter,
+body.dark-mode .district-chapter * {
+  background: #ffffff;
+  color: #000000;
+}
+
+body.dark-mode .carousel-arrow {
+  color: #ffffff;
+}
+
+body.dark-mode .carousel-dot {
+  background: #555555;
+}
+
+body.dark-mode .carousel-dot.active {
+  background: #ffffff;
+}
+
+/* 책 미리보기 이미지 박스 */
+body.dark-mode .book-preview-wrapper {
+  background: #ffffff;
+  border-color: transparent;
+  box-shadow: 9px 9px 0 #ffffff;
+}
+
+/* 좌우 화살표 */
+body.dark-mode .book-preview-btn {
+  color: #ffffff;
+}
+
+/* 점 기본 상태 */
+body.dark-mode .book-preview-dot {
+  background: #555555;
+}
+
+/* 점 활성 상태 */
+body.dark-mode .book-preview-dot.active {
+  background: #ffffff;
+}
+
+/* 아웃트로 글씨 */
+body.dark-mode .outro-section {
+  color: #ffffff;
+}
+
+body.dark-mode .outro-section * {
+  color: #ffffff;
+}
+
+body.dark-mode .outro-dots span {
+  background: #ffffff;
+}
+
+/* 게임 버튼 */
+body.dark-mode .outro-game-button {
+  border: 3px solid #ffffff;
+  background: #000000;
+  color: #ffffff;
+  box-shadow: 4px 4px 0 #ffffff;
+}
+
+body.dark-mode .outro-game-button:hover {
+  box-shadow: 0 0 0 #ffffff;
+}
+
+/* 크레딧 */
+body.dark-mode .intro-footer {
+  background: #111111;
+  color: #ffffff;
+}
+
+body.dark-mode .intro-footer *,
+body.dark-mode .intro-footer a {
+  color: #ffffff;
+}
+
+body.dark-mode .intro-footer a:hover {
+  color: #cccccc;
+}

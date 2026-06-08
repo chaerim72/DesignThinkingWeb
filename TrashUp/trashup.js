@@ -3,6 +3,7 @@
 // ====================================================
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+const gameControlIcons = document.getElementById("game-control-icons");
 
 const trashUpBgmUrl = "../assets/sounds/SellBuyMusic - 니아.mp3";
 
@@ -101,28 +102,6 @@ const trashDefs = [
     // color: "#e6f7ff",
   },
 ];
-
-// 이미지 로딩 체크 모니터링 센서
-// function checkImages() {
-//   let loaded = trashDefs.filter((d) => {
-//     const img = document.getElementById(d.id);
-//     return img && img.complete && img.naturalWidth !== 0;
-//   }).length;
-
-//   const loadingTextEl = document.getElementById("loading-text");
-//   if (loadingTextEl) {
-//     loadingTextEl.innerHTML =
-//       loaded < trashDefs.length
-//         ? `로딩 중... (${loaded}/${trashDefs.length})`
-//         : "[ 클릭하여 게임 시작하기 ]";
-//   }
-//   if (loaded < trashDefs.length) setTimeout(checkImages, 200);
-// }
-// setTimeout(checkImages, 100);
-// setTimeout(() => {
-//   const loadingTextEl = document.getElementById("loading-text");
-//   if (loadingTextEl) loadingTextEl.innerHTML = "[ 클릭하여 게임 시작하기 ]";
-// }, 2500);
 
 function init() {
   score = 0;
@@ -225,7 +204,7 @@ function update() {
 
             score += 100;
             updateScore();
-            
+
             const cog = getTowerCOG();
             if (
               cog < stack[0].x - stack[0].w / 3 ||
@@ -306,7 +285,7 @@ function drawTrash(item) {
 
 function updateScore() {
   document.getElementById("score-text").innerText =
-    `Score: ${String(score).padStart(6, "0")}`;
+    `점수: ${String(score).padStart(6, "0")}`;
 }
 
 function switchState(s) {
@@ -325,6 +304,10 @@ function startGame() {
 
   if (screens.hud) {
     screens.hud.style.display = "flex";
+  }
+
+  if (gameControlIcons) {
+    gameControlIcons.style.display = "flex";
   }
 
   if (window.AudioManager) {
@@ -371,6 +354,10 @@ function togglePause() {
       screens.hud.style.display = "flex";
     }
 
+    if (gameControlIcons) {
+      gameControlIcons.style.display = "flex";
+    }
+
     if (window.AudioManager) {
       AudioManager.playBgm(trashUpBgmUrl);
     }
@@ -392,10 +379,10 @@ const soundBtn = document.getElementById("sound-btn");
 function updateSoundIcon() {
   if (!soundBtn) return;
 
-  soundBtn.textContent =
+  soundBtn.src =
     window.AudioManager && AudioManager.isMuted()
-      ? "🔇"
-      : "🔊";
+      ? "../assets/images/사운드 아이콘off.png"
+      : "../assets/images/사운드 아이콘on.png";
 }
 
 if (soundBtn) {
@@ -418,6 +405,10 @@ function restartGame() {
 
   if (screens.hud) {
     screens.hud.style.display = "flex";
+  }
+
+  if (gameControlIcons) {
+    gameControlIcons.style.display = "flex";
   }
 
   if (window.AudioManager) {
@@ -558,4 +549,8 @@ if (screens.gameover) {
 
 if (screens.hud) {
   screens.hud.style.display = "none";
+}
+
+if (gameControlIcons) {
+  gameControlIcons.style.display = "none";
 }

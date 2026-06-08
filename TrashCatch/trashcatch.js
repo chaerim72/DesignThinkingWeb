@@ -3,29 +3,31 @@ const gameCtx = gameCanvas.getContext("2d");
 
 const trashCatchBgmUrl = "../assets/sounds/SellBuyMusic - 푸드 파이터.mp3";
 
+const uiAreaHeight = 90;
+
+// UI 아이콘 이미지 불러오기
+const soundIconOnImage = new Image();
+soundIconOnImage.src = "../assets/images/사운드 아이콘on.png";
+
+const soundIconOffImage = new Image();
+soundIconOffImage.src = "../assets/images/사운드 아이콘off.png";
+
+const pauseIconImage = new Image();
+pauseIconImage.src = "../assets/images/정지 아이콘.png";
+
+const playIconImage = new Image();
+playIconImage.src = "../assets/images/재생 아이콘.png";
+
 let gameScore = 0;
-const scoreDisplay = document.getElementById("score");
 
 let gameLives = 3;
 const maxLives = 3;
-const lifeHeartsDisplay = document.getElementById("life-hearts");
 
 function updateHeartsDisplay() {
-  let heartString = "";
-
-  for (let i = 1; i <= maxLives; i++) {
-    if (i <= gameLives) {
-      heartString += "♥ ";
-    } else {
-      heartString += "♡ ";
-    }
-  }
-
-  lifeHeartsDisplay.textContent = heartString.trim();
+  // 이제 목숨 표시는 캔버스의 drawTopGameUI()에서 직접 그림
 }
 
 let gameLevel = 1;
-const levelDisplay = document.getElementById("level");
 
 let isGameOver = false;
 let isGamePaused = false;
@@ -95,9 +97,7 @@ function initAndStartGame() {
   isGameOver = false;
   isGamePaused = false;
 
-  scoreDisplay.textContent = gameScore;
   updateHeartsDisplay();
-  levelDisplay.textContent = gameLevel;
 
   clearInterval(gameInterval1);
   clearInterval(gameInterval2);
@@ -128,12 +128,11 @@ function initAndStartGame() {
 
     if (gameElapsedTime % 15 === 0) {
       gameLevel++;
-      levelDisplay.textContent = gameLevel;
       levelUpTimer = 60;
 
       if (window.AudioManager) {
-      AudioManager.playSfx("levelup");
-      } 
+        AudioManager.playSfx("levelup");
+      }
     }
   }, 1000);
 }
@@ -170,7 +169,12 @@ gameCanvas.addEventListener("click", (event) => {
   const clickY = (event.clientY - rect.top) * (gameCanvas.height / rect.height);
 
   // 소리 아이콘 클릭
-  if (clickX >= 326 && clickX <= 356 && clickY >= 8 && clickY <= 40) {
+  if (
+    clickX >= gameCanvas.width - 82 &&
+    clickX <= gameCanvas.width - 52 &&
+    clickY >= 54 &&
+    clickY <= 86
+  ) {
     if (window.AudioManager) {
       AudioManager.toggleMute();
     }
@@ -178,7 +182,12 @@ gameCanvas.addEventListener("click", (event) => {
   }
 
   // 일시정지 버튼 클릭
-  if (clickX >= 360 && clickX <= 390 && clickY >= 8 && clickY <= 40) {
+  if (
+    clickX >= gameCanvas.width - 49 &&
+    clickX <= gameCanvas.width - 18 &&
+    clickY >= 54 &&
+    clickY <= 86
+  ) {
     if (!isFirstClickToStart || isGameOver) return;
 
     if (window.AudioManager) {
@@ -237,6 +246,30 @@ gameCanvas.addEventListener("click", (event) => {
   }
 });
 
+function drawGridBackground() {
+  const gridSize = 40;
+
+  gameCtx.fillStyle = "#ffffff";
+  gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+  gameCtx.strokeStyle = "#e5e5e5";
+  gameCtx.lineWidth = 1;
+
+  for (let x = 0; x <= gameCanvas.width; x += gridSize) {
+    gameCtx.beginPath();
+    gameCtx.moveTo(x, 0);
+    gameCtx.lineTo(x, gameCanvas.height);
+    gameCtx.stroke();
+  }
+
+  for (let y = 0; y <= gameCanvas.height; y += gridSize) {
+    gameCtx.beginPath();
+    gameCtx.moveTo(0, y);
+    gameCtx.lineTo(gameCanvas.width, y);
+    gameCtx.stroke();
+  }
+}
+
 function drawInGameLeaderboard() {
   gameCtx.save();
 
@@ -246,7 +279,7 @@ function drawInGameLeaderboard() {
   gameCtx.textAlign = "left";
 
   const startX = 20;
-  const startY = gameCanvas.height / 2 - 40;
+  const startY = gameCanvas.height / 2 - 50;
 
   gameCtx.fillText("최고기록", startX, startY);
   gameCtx.fillText(highScores[0], startX, startY + 22);
@@ -264,35 +297,77 @@ function drawInGameLeaderboard() {
   gameCtx.restore();
 }
 
+// 상단 ui
+function drawTopGameUI() {
+  gameCtx.save();
+
+  const uiTextY = 28;
+
+  gameCtx.fillStyle = "#000000";
+  gameCtx.font = '700 16px "Pretendard", sans-serif';
+  gameCtx.textBaseline = "middle";
+
+  gameCtx.textAlign = "left";
+  gameCtx.fillText(`레벨: ${gameLevel}`, 25, uiTextY);
+
+  const paddedScore = String(gameScore).padStart(6, "0");
+
+  gameCtx.textAlign = "center";
+  gameCtx.fillText(`점수: ${paddedScore}`, gameCanvas.width / 2.2, uiTextY);
+
+  let heartString = "";
+
+  for (let i = 1; i <= maxLives; i++) {
+    if (i <= gameLives) {
+      heartString += "♥ ";
+    } else {
+      heartString += "♡ ";
+    }
+  }
+
+  gameCtx.textAlign = "right";
+  gameCtx.fillText(
+    `목숨: ${heartString.trim()}`,
+    gameCanvas.width - 25,
+    uiTextY,
+  );
+
+  gameCtx.restore();
+}
+
 function drawControlIcons() {
   gameCtx.save();
 
-  gameCtx.fillStyle = "#4a4a4a";
-  gameCtx.font = '16px "Pretendard", sans-serif';
-  gameCtx.textAlign = "center";
-  gameCtx.textBaseline = "middle";
+  const iconSize = 22;
 
-  const soundIcon =
+  // 상단 UI 바로 아래 오른쪽 아이콘 위치
+  const soundX = gameCanvas.width - 78;
+  const soundY = 50;
+
+  const pauseX = gameCanvas.width - 45;
+  const pauseY = 50;
+
+  const currentSoundIcon =
     window.AudioManager && AudioManager.isMuted()
-      ? "🔇"
-      : "🔊";
+      ? soundIconOffImage
+      : soundIconOnImage;
 
-  gameCtx.fillText(soundIcon, 342, 24);
+  const currentPauseIcon = isGamePaused ? playIconImage : pauseIconImage;
 
-  gameCtx.fillStyle = "#000000";
+  if (
+    currentSoundIcon &&
+    currentSoundIcon.complete &&
+    currentSoundIcon.naturalWidth > 0
+  ) {
+    gameCtx.drawImage(currentSoundIcon, soundX, soundY, iconSize, iconSize);
+  }
 
-  if (isGamePaused) {
-    // 재생 아이콘
-    gameCtx.beginPath();
-    gameCtx.moveTo(370, 16);
-    gameCtx.lineTo(370, 32);
-    gameCtx.lineTo(383, 24);
-    gameCtx.closePath();
-    gameCtx.fill();
-  } else {
-    // 일시정지 아이콘
-    gameCtx.fillRect(368, 16, 4, 14);
-    gameCtx.fillRect(376, 16, 4, 14);
+  if (
+    currentPauseIcon &&
+    currentPauseIcon.complete &&
+    currentPauseIcon.naturalWidth > 0
+  ) {
+    gameCtx.drawImage(currentPauseIcon, pauseX, pauseY, iconSize, iconSize);
   }
 
   gameCtx.restore();
@@ -365,7 +440,6 @@ function updateAndDrawTrashItems(shouldUpdate = true) {
       i--;
 
       gameScore += 10;
-      scoreDisplay.textContent = gameScore;
 
       if (window.AudioManager) {
         AudioManager.playSfx("catch");
@@ -399,26 +473,26 @@ function drawStartOverlay() {
   gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
   gameCtx.fillStyle = "#000000";
-  gameCtx.font = '700 16px "Pretendard", sans-serif';
+  gameCtx.font = '700 14px "Pretendard", sans-serif';
   gameCtx.textAlign = "center";
 
   gameCtx.fillText(
     "마우스로 움직여 쓰레기를 담으세요",
     gameCanvas.width / 2,
-    gameCanvas.height / 2 - 14
+    gameCanvas.height / 2 - 14,
   );
 
-  gameCtx.font = '700 18px "Pretendard", sans-serif';
+  gameCtx.font = '800 16px "Pretendard", sans-serif';
   gameCtx.fillText(
     "[ 클릭하여 게임 시작하기 ]",
     gameCanvas.width / 2,
-    gameCanvas.height / 2 + 18
+    gameCanvas.height / 2 + 18,
   );
 }
 
 function drawGameOverScreen() {
   gameCtx.fillStyle = "#000000";
-  gameCtx.font = "700 28px 'Pretendard', sans-serif";
+  gameCtx.font = "800 20px 'Pretendard', sans-serif";
   gameCtx.textAlign = "center";
   gameCtx.fillText(
     "게임 오버",
@@ -426,7 +500,7 @@ function drawGameOverScreen() {
     gameCanvas.height / 2 - 20,
   );
 
-  gameCtx.font = "600 13px 'Pretendard', sans-serif";
+  gameCtx.font = "800 16px 'Pretendard', sans-serif";
   gameCtx.fillText(
     "[ 클릭하여 게임 재시작하기 ]",
     gameCanvas.width / 2,
@@ -439,15 +513,19 @@ function drawPausedScreen() {
   gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
   gameCtx.fillStyle = "#000000";
-  gameCtx.font = "700 28px 'Pretendard', sans-serif";
+  gameCtx.font = "800 20px 'Pretendard', sans-serif";
   gameCtx.textAlign = "center";
-  gameCtx.fillText("일시 정지", gameCanvas.width / 2, gameCanvas.height / 2 - 10);
+  gameCtx.fillText(
+    "일시 정지",
+    gameCanvas.width / 2,
+    gameCanvas.height / 2 - 10,
+  );
 
-  gameCtx.font = "600 13px 'Pretendard', sans-serif";
+  gameCtx.font = "800 16px 'Pretendard', sans-serif";
   gameCtx.fillText(
     "[ 클릭하여 계속하기 ]",
     gameCanvas.width / 2,
-    gameCanvas.height / 2 + 20
+    gameCanvas.height / 2 + 20,
   );
 }
 
@@ -459,7 +537,7 @@ function drawLevelUpText() {
 
     if (levelUpTimer % 10 > 3) {
       gameCtx.fillText(
-        `레벨업! LV:${gameLevel}`,
+        `레벨 :${gameLevel}`,
         gameCanvas.width / 2,
         gameCanvas.height / 2 - 80,
       );
@@ -472,8 +550,11 @@ function drawLevelUpText() {
 function runGameLoop() {
   gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
-  drawInGameLeaderboard();
+  drawGridBackground();
+
+  drawTopGameUI();
   drawControlIcons();
+  drawInGameLeaderboard();
   drawPlayerBasket();
 
   if (!isFirstClickToStart) {

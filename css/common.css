@@ -231,3 +231,62 @@ body {
 .game-page-dot.active {
   background: #333333;
 }
+
+/* =========================
+   SAFE DARK MODE
+========================= */
+
+html.dark-mode,
+body.dark-mode {
+  background-color: #111111;
+  color: #ffffff;
+}
+
+body.dark-mode .navbar {
+  background-color: #111111;
+}
+
+body.dark-mode .navbar .item-text {
+  color: #ffffff;
+}
+
+body.dark-mode .navbar .item-text::after {
+  background-color: #ffffff;
+}
+
+body.dark-mode .game-page,
+body.dark-mode .introduce-page,
+body.dark-mode .setting-page {
+  background-color: #111111;
+  color: #ffffff;
+}
+
+body.dark-mode .game-title,
+body.dark-mode .chapter-number,
+body.dark-mode .chapter-title,
+body.dark-mode .chapter-text,
+body.dark-mode .section-title,
+body.dark-mode .setting-title,
+body.dark-mode .setting-section-title,
+body.dark-mode .control-group,
+body.dark-mode .value-text {
+  color: #ffffff;
+}
+
+body.dark-mode .game-side-arrow {
+  color: #ffffff;
+}
+
+body.dark-mode .game-page-dot {
+  background: #555555;
+}
+
+body.dark-mode .game-page-dot.active {
+  background: #ffffff;
+}
+
+/* 이미지/지도는 반전시키지 않기 */
+body.dark-mode img,
+body.dark-mode canvas {
+  filter: none;
+}

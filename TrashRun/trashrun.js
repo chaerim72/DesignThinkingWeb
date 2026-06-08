@@ -2,29 +2,87 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
 const bgmSoundUrl = "../assets/sounds/SellBuyMusic - 뒤뚱뒤뚱.mp3";
-// const bgmSoundUrl = "../assets/sounds/trashsound.wav";
 
-// 캐릭터 이미지 불러오기
-const playerImage = new Image();
-playerImage.src = "../assets/images/뛰어가는 캐릭터2.png";
+function loadUiIcon(src, name) {
+  const img = new Image();
+
+  img.onload = () => {
+    console.log(`${name} 로드 성공:`, src);
+  };
+
+  img.onerror = () => {
+    console.log(`${name} 로드 실패:`, src);
+  };
+
+  img.src = src;
+  return img;
+}
+
+const soundIconOnImage = loadUiIcon(
+  "../assets/images/사운드 아이콘on.png",
+  "사운드 ON 아이콘",
+);
+
+const soundIconOffImage = loadUiIcon(
+  "../assets/images/사운드 아이콘off.png",
+  "사운드 OFF 아이콘",
+);
+
+const pauseIconImage = loadUiIcon(
+  "../assets/images/정지 아이콘.png",
+  "정지 아이콘",
+);
+
+const playIconImage = loadUiIcon(
+  "../assets/images/재생 아이콘.png",
+  "재생 아이콘",
+);
+
+// 캐릭터 달리기 이미지 불러오기
+const playerRunImage1 = new Image();
+playerRunImage1.src = "../assets/images/뛰어가는 캐릭터1.png";
+
+const playerRunImage2 = new Image();
+playerRunImage2.src = "../assets/images/뛰어가는 캐릭터2.png";
+
+const playerRunImage3 = new Image();
+playerRunImage3.src = "../assets/images/뛰어가는 캐릭터3.png";
+
+const playerRunImages = [playerRunImage1, playerRunImage2, playerRunImage3];
+
+// 캐릭터 게임오버 이미지 불러오기
+const playerDeadImage1 = new Image();
+playerDeadImage1.src = "../assets/images/캐릭터 게임오버1.png";
+
+const playerDeadImage2 = new Image();
+playerDeadImage2.src = "../assets/images/캐릭터 게임오버2.png";
+
+const playerDeadImages = [playerDeadImage1, playerDeadImage2];
+
+// 애니메이션 속도 조절
+let playerRunFrame = 0;
+let playerDeadFrame = 0;
+
+const playerRunFrameSpeed = 8;
+const playerDeadFrameSpeed = 4;
 
 // 장애물 이미지 경로 + 이미지별 기준 높이
 const obstacleImageData = [
   {
     src: "../assets/images/쓰레기런_담뱃갑.png",
-    height: 50,
+    height: 70,
   },
   {
     src: "../assets/images/쓰레기런_몬스터02.png",
-    height: 56,
+    height: 80,
   },
   {
     src: "../assets/images/쓰레기런_바나나03.png",
-    height: 50,
+    height: 30,
   },
   {
     src: "../assets/images/쓰레기런_사과04.png",
-    height: 50,
+    height: 30,
   },
   {
     src: "../assets/images/쓰레기런_쓰레기봉투05.png",
@@ -36,15 +94,15 @@ const obstacleImageData = [
   },
   {
     src: "../assets/images/쓰레기런_초콜릿.png",
-    height: 50,
+    height: 40,
   },
   {
     src: "../assets/images/쓰레기런_커피컵.png",
-    height: 50,
+    height: 100,
   },
   {
     src: "../assets/images/쓰레기런_토레타09.png",
-    height: 50,
+    height: 30,
   },
 ];
 
@@ -165,24 +223,55 @@ const player = {
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
 
-    if (playerImage.complete && playerImage.naturalWidth > 0) {
-      ctx.drawImage(playerImage, this.x, this.y, this.width, this.height);
+    let currentImage = playerRunImages[0];
+
+    if (gameResult === "GAMEOVER") {
+      const deadIndex = Math.min(
+        Math.floor(playerDeadFrame / playerDeadFrameSpeed),
+        playerDeadImages.length - 1,
+      );
+
+      currentImage = playerDeadImages[deadIndex];
+    } else if (gameResult === "RUNNING") {
+      const runIndex =
+        Math.floor(playerRunFrame / playerRunFrameSpeed) %
+        playerRunImages.length;
+
+      currentImage = playerRunImages[runIndex];
     } else {
-      // 이미지가 아직 안 불러와졌을 때 임시 네모
-      ctx.fillStyle = "#000000";
-      ctx.fillRect(this.x, this.y, this.width, this.height);
+      currentImage = playerRunImages[0];
     }
 
-    if (gameResult === "READY") {
-      ctx.strokeStyle = "#ff3399";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(this.x + this.width / 2, this.y + 130);
-      ctx.lineTo(this.x + this.width / 2, this.y + 85);
-      ctx.moveTo(this.x + this.width / 2 - 6, this.y + 93);
-      ctx.lineTo(this.x + this.width / 2, this.y + 85);
-      ctx.lineTo(this.x + this.width / 2 + 6, this.y + 93);
-      ctx.stroke();
+    if (
+      currentImage &&
+      currentImage.complete &&
+      currentImage.naturalWidth > 0
+    ) {
+      const imageRatio = currentImage.naturalWidth / currentImage.naturalHeight;
+
+      // 상태별 이미지 크기 조절
+      let imageScale = 1;
+
+      if (gameResult === "GAMEOVER") {
+        imageScale = 0.85; // 죽는 모션만 크기 조절
+      } else {
+        imageScale = 1; // 달리기 모션 크기 유지
+      }
+
+      const drawHeight = this.height * imageScale;
+      const drawWidth = drawHeight * imageRatio;
+
+      // 캐릭터 중심 정렬
+      const drawX = this.x + this.width / 2 - drawWidth / 2;
+
+      // 발 위치 기준 정렬
+      const drawY = this.y + this.height - drawHeight;
+
+      ctx.drawImage(currentImage, drawX, drawY, drawWidth, drawHeight);
+    } else {
+      // 이미지 로딩 전 임시 네모
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
     ctx.restore();
@@ -369,47 +458,46 @@ function drawMovingGround() {
 }
 
 function drawUI() {
-  const scoreBoxWidth = 140;
-  const scoreBoxHeight = 32;
-  const scoreBoxX = canvas.width / 2 - scoreBoxWidth / 2;
-  const scoreBoxY = 25;
-
-  ctx.fillStyle = "#e8e8e8";
-  ctx.fillRect(scoreBoxX, scoreBoxY, scoreBoxWidth, scoreBoxHeight);
-
-  ctx.strokeStyle = "#7f7f7f";
-  ctx.strokeRect(scoreBoxX, scoreBoxY, scoreBoxWidth, scoreBoxHeight);
+  // 상단 SCORE 텍스트
+  const uiTextY = 30;
 
   ctx.fillStyle = "#000000";
-  ctx.font = '400 12px "Pretendard", sans-serif';
-  ctx.textAlign = "center";
-  let paddedScore = String(Math.floor(score)).padStart(6, "0");
-  ctx.fillText(`점수: ${paddedScore}`, canvas.width / 2, scoreBoxY + 21);
-
-  // 우측 상단 아이콘
-  ctx.fillStyle = "#4a4a4a";
-  ctx.font = '16px "Pretendard", sans-serif';
-  ctx.textAlign = "center";
+  ctx.font = '700 16px "Pretendard", sans-serif';
+  ctx.textAlign = "left";
   ctx.textBaseline = "middle";
 
-  const soundIcon = window.AudioManager && AudioManager.isMuted() ? "🔇" : "🔊";
+  const paddedScore = String(Math.floor(score)).padStart(6, "0");
+  ctx.fillText(`점수: ${paddedScore}`, 25, uiTextY);
 
-  ctx.fillText(soundIcon, canvas.width - 64, 36);
+  // 우측 상단 아이콘 이미지
+  const iconSize = 20;
+  const iconY = 20;
 
-  ctx.fillStyle = "#4a4a4a";
+  const soundX = canvas.width - 76;
+  const pauseX = canvas.width - 46;
 
-  if (gameResult === "PAUSED") {
-    // 재생 아이콘
-    ctx.beginPath();
-    ctx.moveTo(canvas.width - 44, 27);
-    ctx.lineTo(canvas.width - 44, 45);
-    ctx.lineTo(canvas.width - 30, 36);
-    ctx.closePath();
-    ctx.fill();
-  } else {
-    // 일시정지 아이콘
-    ctx.fillRect(canvas.width - 45, 28, 4, 16);
-    ctx.fillRect(canvas.width - 37, 28, 4, 16);
+  const currentSoundIcon =
+    window.AudioManager && AudioManager.isMuted()
+      ? soundIconOffImage
+      : soundIconOnImage;
+
+  const currentPauseIcon =
+    gameResult === "PAUSED" ? playIconImage : pauseIconImage;
+
+  if (
+    currentSoundIcon &&
+    currentSoundIcon.complete &&
+    currentSoundIcon.naturalWidth > 0
+  ) {
+    ctx.drawImage(currentSoundIcon, soundX, iconY, iconSize, iconSize);
+  }
+
+  if (
+    currentPauseIcon &&
+    currentPauseIcon.complete &&
+    currentPauseIcon.naturalWidth > 0
+  ) {
+    ctx.drawImage(currentPauseIcon, pauseX, iconY, iconSize, iconSize);
   }
 
   ctx.textBaseline = "alphabetic";
@@ -419,52 +507,45 @@ function drawUI() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = "#000000";
-    ctx.font = '800 16px "Pretendard", sans-serif';
     ctx.textAlign = "center";
 
+    ctx.font = '700 14px "Pretendard", sans-serif';
+    ctx.fillText(
+      "마우스로 클릭해 점프하세요",
+      canvas.width / 2,
+      canvas.height / 2 - 10,
+    );
+
+    ctx.font = '800 16px "Pretendard", sans-serif';
     ctx.fillText(
       "[ 클릭하여 게임 시작하기 ]",
       canvas.width / 2,
-      canvas.height / 2,
+      canvas.height / 2 + 20,
     );
   } else if (gameResult === "PAUSED") {
     ctx.fillStyle = "rgba(255,255,255,0.45)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = "#000000";
-    ctx.font = '700 28px "Pretendard", sans-serif';
+    ctx.font = '800 20px "Pretendard", sans-serif';
     ctx.textAlign = "center";
     ctx.fillText("일시 정지", canvas.width / 2, canvas.height / 2 - 10);
 
-    ctx.font = '600 13px "Pretendard", sans-serif';
+    ctx.font = '800 16px "Pretendard", sans-serif';
     ctx.fillText(
       "[ 클릭하여 계속하기 ]",
       canvas.width / 2,
       canvas.height / 2 + 20,
     );
   } else if (gameResult === "GAMEOVER") {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    const boxWidth = 240;
-    const boxHeight = 80;
-    const boxX = canvas.width / 2 - boxWidth / 2;
-    const boxY = canvas.height / 2 - boxHeight / 2;
-
     ctx.fillStyle = "#000000";
-    ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
-
-    ctx.strokeStyle = "#ffffff";
-    ctx.strokeRect(boxX + 5, boxY + 5, boxWidth - 10, boxHeight - 10);
-
-    ctx.fillStyle = "#ffffff";
-    ctx.font = '700 18px "Pretendard", sans-serif';
+    ctx.font = '800 20px "Pretendard", sans-serif';
     ctx.textAlign = "center";
-    ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2 - 5);
+    ctx.fillText("게임 오버", canvas.width / 2, canvas.height / 2 - 10);
 
-    ctx.font = '400 12px "Pretendard", sans-serif';
+    ctx.font = '800 16px "Pretendard", sans-serif';
     ctx.fillText(
-      "다시 시작하려면 클릭",
+      "[ 클릭하여 게임 다시시작하기 ]",
       canvas.width / 2,
       canvas.height / 2 + 20,
     );
@@ -493,6 +574,10 @@ function resetGame() {
   player.y = 340;
   player.velocityY = 0;
   gameResult = "RUNNING";
+
+  playerRunFrame = 0;
+  playerDeadFrame = 0;
+
   currentBgIndex = 0;
   backgroundX = 0;
   groundX = 0;
@@ -505,6 +590,7 @@ function gameLoop() {
 
   if (gameResult === "RUNNING") {
     frameCount++;
+    playerRunFrame++;
     score += 0.25;
 
     if (gameSpeed < maxSpeed) {
@@ -529,12 +615,17 @@ function gameLoop() {
     player.update();
   }
 
+  if (gameResult === "GAMEOVER") {
+    playerDeadFrame++;
+  }
+
   for (let i = obstacles.length - 1; i >= 0; i--) {
     if (gameResult === "RUNNING") obstacles[i].update();
     obstacles[i].draw();
 
     if (gameResult === "RUNNING" && checkCollision(player, obstacles[i])) {
       gameResult = "GAMEOVER";
+      playerDeadFrame = 0;
 
       if (window.AudioManager) {
         AudioManager.playSfx("gameover");

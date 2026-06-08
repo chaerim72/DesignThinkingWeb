@@ -68,6 +68,7 @@ function applyVolumes() {
 function applyTheme() {
   const isDark = localStorage.getItem("theme") === "dark";
 
+  document.documentElement.classList.toggle("dark-mode", isDark);
   document.body.classList.toggle("dark-mode", isDark);
 
   if (darkModeToggle) {

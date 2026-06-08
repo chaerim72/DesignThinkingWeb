@@ -1,5 +1,14 @@
 // 바나나 로고 파티클 전용 코드
 const canvas = document.getElementById("particleCanvas");
+
+function getParticleColor() {
+  const isDarkMode =
+    document.documentElement.classList.contains("dark-mode") ||
+    document.body.classList.contains("dark-mode");
+
+  return isDarkMode ? "#ffffff" : "#000000";
+}
+
 const ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
@@ -61,7 +70,7 @@ class Particle {
     this.relX = relX;
     this.relY = relY;
 
-    this.color = "#000000";
+    this.color = getParticleColor();
 
     const layerRand = Math.random();
 
