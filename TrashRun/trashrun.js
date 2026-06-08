@@ -6,47 +6,71 @@ const bgmSoundUrl = "../assets/sounds/SellBuyMusic - 뒤뚱뒤뚱.mp3";
 
 // 캐릭터 이미지 불러오기
 const playerImage = new Image();
-playerImage.src = "../assets/images/쓰레기런_캐릭터기본.png";
+playerImage.src = "../assets/images/뛰어가는 캐릭터2.png";
 
-// 장애물 이미지 불러오기
-const obstacleImage1 = new Image();
-obstacleImage1.src = "../assets/images/쓰레기런_담뱃갑.png/";
-
-const obstacleImage2 = new Image();
-obstacleImage2.src = "../assets/images/쓰레기런_몬스터.png";
-
-const obstacleImage3 = new Image();
-obstacleImage3.src = "../assets/images/쓰레기런_바나나.png.png";
-
-const obstacleImage4 = new Image();
-obstacleImage4.src = "../assets/images/쓰레기런_사과.png";
-
-const obstacleImage5 = new Image();
-obstacleImage4.src = "../assets/images/쓰레기런_쓰레기봉투.png";
-
-const obstacleImage6 = new Image();
-obstacleImage4.src = "../assets/images/쓰레기런_양파링.png";
-
-const obstacleImage7 = new Image();
-obstacleImage4.src = "../assets/images/쓰레기런_초콜릿.png";
-
-const obstacleImage8 = new Image();
-obstacleImage4.src = "../assets/images/쓰레기런_커피컵.png";
-
-const obstacleImage9 = new Image();
-obstacleImage4.src = "../assets/images/쓰레기런_토레타.png";
-
-const obstacleImages = [
-  obstacleImage1,
-  obstacleImage2,
-  obstacleImage3,
-  obstacleImage4,
-  obstacleImage5,
-  obstacleImage6,
-  obstacleImage7,
-  obstacleImage8,
-  obstacleImage9,
+// 장애물 이미지 경로 + 이미지별 기준 높이
+const obstacleImageData = [
+  {
+    src: "../assets/images/쓰레기런_담뱃갑.png",
+    height: 50,
+  },
+  {
+    src: "../assets/images/쓰레기런_몬스터02.png",
+    height: 56,
+  },
+  {
+    src: "../assets/images/쓰레기런_바나나03.png",
+    height: 50,
+  },
+  {
+    src: "../assets/images/쓰레기런_사과04.png",
+    height: 50,
+  },
+  {
+    src: "../assets/images/쓰레기런_쓰레기봉투05.png",
+    height: 50,
+  },
+  {
+    src: "../assets/images/쓰레기런_양파링06.png",
+    height: 50,
+  },
+  {
+    src: "../assets/images/쓰레기런_초콜릿.png",
+    height: 50,
+  },
+  {
+    src: "../assets/images/쓰레기런_커피컵.png",
+    height: 50,
+  },
+  {
+    src: "../assets/images/쓰레기런_토레타09.png",
+    height: 50,
+  },
 ];
+
+// 로드 성공한 이미지 정보만 저장
+const obstacleImages = [];
+
+obstacleImageData.forEach((data, index) => {
+  const img = new Image();
+
+  img.onload = () => {
+    obstacleImages.push({
+      image: img,
+      height: data.height,
+      originalIndex: index,
+      src: data.src,
+    });
+
+    console.log("장애물 이미지 로드 성공:", data.src);
+  };
+
+  img.onerror = () => {
+    console.log("장애물 이미지 로드 실패:", data.src);
+  };
+
+  img.src = data.src;
+});
 
 //배경이미지 불러오기
 const backgroundImages = [];
@@ -189,52 +213,41 @@ class Obstacle {
   constructor() {
     this.x = canvas.width + 50;
 
-    this.type = Math.floor(Math.random() * obstacleImages.length);
-    this.image = obstacleImages[this.type];
-
-    // 이미지별 기준 높이만 지정
-    if (this.type === 0) {
+    // 아직 이미지가 하나도 안 불러와졌으면 생성 방지용 임시값
+    if (obstacleImages.length === 0) {
+      this.image = null;
+      this.width = 50;
       this.height = 50;
-    } else if (this.type === 1) {
-      this.height = 56;
-    } else if (this.type === 2) {
-      this.height = 50;
-    } else if (this.type === 3) {
-      this.height = 50;
-    } else if (this.type === 4) {
-      this.height = 50;
-    } else if (this.type === 5) {
-      this.height = 50;
-    } else if (this.type === 6) {
-      this.height = 50;
-    } else if (this.type === 7) {
-      this.height = 50;
-    } else {
-      this.height = 50;
+      this.y = 420 - this.height;
+      return;
     }
 
-    // 일단 임시 width
-    this.width = 50;
+    // 로드 성공한 이미지 중에서만 랜덤 선택
+    const randomIndex = Math.floor(Math.random() * obstacleImages.length);
+    const selected = obstacleImages[randomIndex];
 
-    // 이미지가 로드되어 있으면 원본 비율로 width 계산
-    if (this.image.complete && this.image.naturalWidth > 0) {
-      const ratio = this.image.naturalWidth / this.image.naturalHeight;
-      this.width = this.height * ratio;
-    }
+    this.image = selected.image;
+    this.type = selected.originalIndex;
 
+    // 이미지별로 지정한 기준 높이 적용
+    this.height = selected.height;
+
+    // 원본 비율 유지해서 width 계산
+    const ratio = this.image.naturalWidth / this.image.naturalHeight;
+    this.width = this.height * ratio;
+
+    // 바닥 기준
     this.y = 420 - this.height;
   }
 
   draw() {
     ctx.save();
+
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
 
-    if (this.image.complete && this.image.naturalWidth > 0) {
+    if (this.image && this.image.complete && this.image.naturalWidth > 0) {
       ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-    } else {
-      ctx.fillStyle = "#111111";
-      ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
     ctx.restore();
@@ -500,7 +513,9 @@ function gameLoop() {
 
     // 장애물 헬모드 스폰 로직: 속도가 빨라질수록 스폰 주기(Interval)가 극단적으로 짧아짐
     if (frameCount >= nextObstacleFrame) {
-      obstacles.push(new Obstacle());
+      if (obstacleImages.length > 0) {
+        obstacles.push(new Obstacle());
+      }
 
       // 속도에 비례해 장애물 간 최소/최대 거리를 극단적으로 좁힘 (연속 장애물 유도)
       const minInterval = Math.max(25, 70 - Math.floor(gameSpeed * 2.2));
