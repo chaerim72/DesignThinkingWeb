@@ -72,6 +72,12 @@ let currentBgIndex = 0;
 let backgroundX = 0;
 let backgroundSpeed = 5;
 
+// 바닥 이미지 불러오기
+const groundImage = new Image();
+groundImage.src = "../assets/images/쓰레기런배경_바닥.png";
+
+let groundX = 0;
+
 // 게임 설정 시스템 물리 수치 (극강의 스릴을 위한 재튜닝)
 let gameResult = "READY";
 let score = 0;
@@ -130,39 +136,33 @@ const player = {
   minJumpForce: -7, // 가변 숏점프 제어를 더 날카롭게 변경
 
   draw() {
-  ctx.save();
+    ctx.save();
 
-  ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = "high";
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
 
-  if (playerImage.complete && playerImage.naturalWidth > 0) {
-    ctx.drawImage(
-      playerImage,
-      this.x,
-      this.y,
-      this.width,
-      this.height
-    );
-  } else {
-    // 이미지가 아직 안 불러와졌을 때 임시 네모
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(this.x, this.y, this.width, this.height);
-  }
+    if (playerImage.complete && playerImage.naturalWidth > 0) {
+      ctx.drawImage(playerImage, this.x, this.y, this.width, this.height);
+    } else {
+      // 이미지가 아직 안 불러와졌을 때 임시 네모
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
 
-  if (gameResult === "READY") {
-    ctx.strokeStyle = "#ff3399";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(this.x + this.width / 2, this.y + 130);
-    ctx.lineTo(this.x + this.width / 2, this.y + 85);
-    ctx.moveTo(this.x + this.width / 2 - 6, this.y + 93);
-    ctx.lineTo(this.x + this.width / 2, this.y + 85);
-    ctx.lineTo(this.x + this.width / 2 + 6, this.y + 93);
-    ctx.stroke();
-  }
+    if (gameResult === "READY") {
+      ctx.strokeStyle = "#ff3399";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(this.x + this.width / 2, this.y + 130);
+      ctx.lineTo(this.x + this.width / 2, this.y + 85);
+      ctx.moveTo(this.x + this.width / 2 - 6, this.y + 93);
+      ctx.lineTo(this.x + this.width / 2, this.y + 85);
+      ctx.lineTo(this.x + this.width / 2 + 6, this.y + 93);
+      ctx.stroke();
+    }
 
-  ctx.restore();
-},
+    ctx.restore();
+  },
 
   update() {
     if (
@@ -286,7 +286,7 @@ function drawMovingBackground() {
   }
 
   // 배경 이미지 세로 사이즈
-  const bgHeight = canvas.height*0.75;
+  const bgHeight = canvas.height * 0.75;
 
   const currentScale = bgHeight / currentBg.naturalHeight;
   const currentWidth = currentBg.naturalWidth * currentScale;
@@ -321,6 +321,40 @@ function drawMovingBackground() {
   }
 }
 
+function drawMovingGround() {
+  if (!groundImage.complete || groundImage.naturalWidth === 0) {
+    return;
+  }
+
+  // 바닥 이미지를 캔버스 너비에 맞춰 비율 유지
+  const groundWidth = canvas.width * 3.65;
+  const groundScale = groundWidth / groundImage.naturalWidth;
+  const groundHeight = groundImage.naturalHeight * groundScale;
+
+  // 바닥은 캔버스 아래에 붙임
+  const groundY = canvas.height - groundHeight;
+
+  // 게임이 진행 중일 때만 바닥 이동
+  if (gameResult === "RUNNING") {
+    groundX -= gameSpeed;
+  }
+
+  // 반복해서 끊기지 않게 두 장 그림
+  ctx.drawImage(groundImage, groundX, groundY, groundWidth, groundHeight);
+  ctx.drawImage(
+    groundImage,
+    groundX + groundWidth,
+    groundY,
+    groundWidth,
+    groundHeight,
+  );
+
+  // 한 장이 완전히 지나가면 위치 초기화
+  if (groundX <= -groundWidth) {
+    groundX += groundWidth;
+  }
+}
+
 function drawUI() {
   const scoreBoxWidth = 140;
   const scoreBoxHeight = 32;
@@ -345,10 +379,7 @@ function drawUI() {
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
-  const soundIcon =
-    window.AudioManager && AudioManager.isMuted()
-      ? "🔇"
-      : "🔊";
+  const soundIcon = window.AudioManager && AudioManager.isMuted() ? "🔇" : "🔊";
 
   ctx.fillText(soundIcon, canvas.width - 64, 36);
 
@@ -381,7 +412,7 @@ function drawUI() {
     ctx.fillText(
       "[ 클릭하여 게임 시작하기 ]",
       canvas.width / 2,
-      canvas.height / 2
+      canvas.height / 2,
     );
   } else if (gameResult === "PAUSED") {
     ctx.fillStyle = "rgba(255,255,255,0.45)";
@@ -396,7 +427,7 @@ function drawUI() {
     ctx.fillText(
       "[ 클릭하여 계속하기 ]",
       canvas.width / 2,
-      canvas.height / 2 + 20
+      canvas.height / 2 + 20,
     );
   } else if (gameResult === "GAMEOVER") {
     ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
@@ -422,7 +453,7 @@ function drawUI() {
     ctx.fillText(
       "다시 시작하려면 클릭",
       canvas.width / 2,
-      canvas.height / 2 + 20
+      canvas.height / 2 + 20,
     );
   }
 }
@@ -451,15 +482,15 @@ function resetGame() {
   gameResult = "RUNNING";
   currentBgIndex = 0;
   backgroundX = 0;
+  groundX = 0;
 }
-
 
 function gameLoop() {
   drawGridBackground();
   drawMovingBackground();
+  drawMovingGround();
 
   if (gameResult === "RUNNING") {
-
     frameCount++;
     score += 0.25;
 

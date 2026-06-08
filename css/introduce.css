@@ -113,8 +113,7 @@ html {
   background-image:
     linear-gradient(#d9d9d9 1px, transparent 1px),
     linear-gradient(90deg, #d9d9d9 1px, transparent 1px);
-  background-size:
-    clamp(60px, calc(var(--safe-vw) * 5), 80px)
+  background-size: clamp(60px, calc(var(--safe-vw) * 5), 80px)
     clamp(60px, calc(var(--safe-vw) * 5), 80px);
 }
 
@@ -136,7 +135,8 @@ html {
   left: 50%;
 
   width: clamp(520px, calc(var(--safe-vw) * 40), 620px);
-  padding: clamp(24px, calc(var(--safe-vw) * 2), 32px) clamp(28px, calc(var(--safe-vw) * 2.3), 37px);
+  padding: clamp(24px, calc(var(--safe-vw) * 2), 32px)
+    clamp(28px, calc(var(--safe-vw) * 2.3), 37px);
 
   background: #ffffff;
   border: 3px solid #222222;
@@ -173,7 +173,9 @@ html {
 
 .body-card-1 {
   top: clamp(100px, calc(var(--safe-vw) * 8.3), 133px);
-  transform: translateX(calc(-50% - clamp(180px, calc(var(--safe-vw) * 18), 260px)));
+  transform: translateX(
+    calc(-50% - clamp(180px, calc(var(--safe-vw) * 18), 260px))
+  );
 }
 
 /* WHY+카드2 묶음 */
@@ -182,7 +184,9 @@ html {
   left: 50%;
   top: clamp(280px, calc(var(--safe-vw) * 23.3), 373px);
   width: clamp(560px, calc(var(--safe-vw) * 42), 660px);
-  transform: translateX(calc(-50% + clamp(180px, calc(var(--safe-vw) * 18), 260px)));
+  transform: translateX(
+    calc(-50% + clamp(180px, calc(var(--safe-vw) * 18), 260px))
+  );
 }
 
 .why-title {
@@ -208,7 +212,9 @@ html {
 
 .body-card-3 {
   top: clamp(480px, calc(var(--safe-vw) * 40), 640px);
-  transform: translateX(calc(-50% - clamp(180px, calc(var(--safe-vw) * 18), 260px)));
+  transform: translateX(
+    calc(-50% - clamp(180px, calc(var(--safe-vw) * 18), 260px))
+  );
 }
 
 /* 폴라로이드 3장 사진 파트 */
@@ -339,21 +345,152 @@ html {
 }
 
 .chapter-two-map-wrap {
+  position: relative;
+
   width: clamp(900px, calc(var(--safe-vw) * 76), 1020px);
   margin: 0 auto;
+
+  background: #ffffff;
+  overflow: visible;
 }
 
 .chapter-two-map {
   width: 100%;
   height: auto;
   display: block;
+
+  border: 2px solid #000000;
+  box-sizing: border-box;
+}
+
+/* 지도 위 투명 클릭/호버 영역 */
+.chapter-two-map-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 5;
+}
+
+.map-hover-area {
+  fill: rgba(255, 255, 255, 0);
+  stroke: transparent;
+  stroke-width: 30px;
+  stroke-linejoin: round;
+
+  cursor: pointer;
+  pointer-events: auto;
+
+  transition:
+    fill 0.25s ease,
+    stroke 0.25s ease;
+}
+
+/* 구역별 호버/클릭 색상 */
+#area-cheonhoji:hover,
+#area-cheonhoji.active {
+  fill: rgba(99, 182, 49, 0.25);
+}
+
+#area-baekseok:hover,
+#area-baekseok.active {
+  fill: rgba(58, 71, 154, 0.23);
+}
+
+#area-sangmyung-univ:hover,
+#area-sangmyung-univ.active {
+  fill: rgba(99, 182, 49, 0.25);
+}
+
+#area-sangmyung-shop:hover,
+#area-sangmyung-shop.active {
+  fill: rgba(230, 59, 139, 0.23);
+}
+
+#area-hoseo:hover,
+#area-hoseo.active {
+  fill: rgba(239, 134, 25, 0.25);
+}
+
+/* 설명 박스 */
+.map-info-box {
+  display: none;
+  position: absolute;
+
+  width: max-content;
+  max-width: 360px;
+
+  padding: 15px;
+
+  background-color: rgba(255, 255, 255, 0.98);
+  border: 1px solid #000000;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.12);
+
+  word-break: keep-all;
+
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.map-info-box.active {
+  display: block;
+}
+
+/* 설명 박스 위치 */
+#box-cheonho {
+  top: 36%;
+  left: 32%;
+}
+
+#box-baekseok {
+  top: 2%;
+  left: 63%;
+}
+
+#box-sangmyung-univ {
+  top: 44%;
+  left: 64%;
+}
+
+#box-sangmyung-shop {
+  top: 68%;
+  left: 54%;
+}
+
+#box-hoseo {
+  top: 82%;
+  left: 70%;
+}
+
+.map-info-title {
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+
+  border-bottom: 1px solid #000000;
+
+  font-size: 15px;
+  font-weight: 800;
+  color: #000000;
+  letter-spacing: -0.03em;
+}
+
+.map-info-content {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: #333333;
+  letter-spacing: -0.03em;
 }
 
 /* 구역별 슬라이드 영역 */
 .district-carousel-section {
   position: relative;
   width: 100%;
-  padding: clamp(40px, calc(var(--safe-vw) * 6), 50px) 0 clamp(90px, calc(var(--safe-vw) * 7), 120px);
+  padding: clamp(40px, calc(var(--safe-vw) * 6), 50px) 0
+    clamp(90px, calc(var(--safe-vw) * 7), 120px);
 }
 
 /* 이미지 + 텍스트 묶음 */
@@ -369,7 +506,7 @@ html {
 
 /* 지도 이미지 */
 .district-image-wrap {
-  width: clamp(430px, calc(var(--safe-vw) * 38), 610px);
+  width: clamp(430px, calc(var(--safe-vw) * 38), 500px);
   flex-shrink: 0;
 }
 
@@ -377,6 +514,9 @@ html {
   width: 100%;
   height: auto;
   display: block;
+
+  border: 2px solid #000000;
+  box-sizing: border-box;
 }
 
 /* 텍스트 영역 */
@@ -475,7 +615,8 @@ html {
 /* 폴라로이드 3장 사진 파트 */
 .photo-stack-section {
   width: 100%;
-  padding: clamp(80px, calc(var(--safe-vw) * 7), 120px) 0 clamp(120px, calc(var(--safe-vw) * 9), 160px);
+  padding: clamp(80px, calc(var(--safe-vw) * 7), 120px) 0
+    clamp(120px, calc(var(--safe-vw) * 9), 160px);
   background: transparent;
   overflow: hidden;
 }
@@ -599,6 +740,10 @@ html {
 
   background: transparent;
   overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .book-preview-container {
@@ -665,6 +810,31 @@ html {
   transform: translateY(-50%) scale(1.08);
 }
 
+/* 책 미리보기 점 표시 */
+.book-preview-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(12px, calc(var(--safe-vw) * 1), 16px);
+
+  margin-top: clamp(56px, calc(var(--safe-vw) * 3), 72px);
+}
+
+.book-preview-dot {
+  width: 12px;
+  height: 12px;
+
+  padding: 0;
+  border: none;
+  background: #d9d9d9;
+
+  cursor: pointer;
+}
+
+.book-preview-dot.active {
+  background: #333333;
+}
+
 /* 아웃트로 섹션 */
 .outro-section {
   width: 100%;
@@ -675,7 +845,8 @@ html {
   align-items: center;
   justify-content: center;
 
-  padding: clamp(100px, calc(var(--safe-vw) * 9), 140px) clamp(100px, calc(var(--safe-vw) * 8), 140px);
+  padding: clamp(100px, calc(var(--safe-vw) * 9), 140px)
+    clamp(100px, calc(var(--safe-vw) * 8), 140px);
 
   background: transparent;
   text-align: center;
@@ -736,7 +907,8 @@ html {
   align-items: center;
   justify-content: center;
 
-  padding: clamp(10px, calc(var(--safe-vw) * 1), 14px) clamp(18px, calc(var(--safe-vw) * 2), 28px);
+  padding: clamp(10px, calc(var(--safe-vw) * 1), 14px)
+    clamp(18px, calc(var(--safe-vw) * 2), 28px);
 
   border: 3px solid #111111;
   background: #ffffff;
@@ -765,7 +937,8 @@ html {
 .intro-footer {
   width: 100%;
   /* min-height: clamp(150px, 10vw, 200px); */
-  padding: clamp(30px, calc(var(--safe-vw) * 2), 30px) clamp(80px, calc(var(--safe-vw) * 8), 100px);
+  padding: clamp(30px, calc(var(--safe-vw) * 2), 30px)
+    clamp(80px, calc(var(--safe-vw) * 8), 100px);
 
   display: grid;
   grid-template-columns: 2.2fr 1fr 1.4fr 1.4fr;

@@ -178,10 +178,8 @@ function moveToIntroStart() {
   const navbarHeight = navbar ? navbar.offsetHeight : 0;
 
   const targetY =
-    introStart.getBoundingClientRect().top +
-    window.pageYOffset -
-    navbarHeight;
-//스크롤 속도 조절
+    introStart.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+  //스크롤 속도 조절
   smoothScrollTo(targetY, 600);
 }
 
@@ -209,9 +207,81 @@ window.addEventListener(
       moveToIntroStart();
     }
   },
-  { passive: false }
+  { passive: false },
 );
 
+// 챕터 02 큰 지도 호버/클릭 고정 기능
+const mapWrap = document.querySelector(".chapter-two-map-wrap");
+const mapAreas = document.querySelectorAll(".map-hover-area");
+const mapInfoBoxes = document.querySelectorAll(".map-info-box");
+
+let fixedMapArea = null;
+
+function hideAllMapInfo() {
+  mapAreas.forEach((area) => {
+    area.classList.remove("active");
+  });
+
+  mapInfoBoxes.forEach((box) => {
+    box.classList.remove("active");
+  });
+}
+
+function showMapInfo(area) {
+  const boxId = area.dataset.box;
+  const box = document.getElementById(boxId);
+
+  if (!box) return;
+
+  area.classList.add("active");
+  box.classList.add("active");
+}
+
+mapAreas.forEach((area) => {
+  area.addEventListener("mouseenter", () => {
+    if (fixedMapArea) return;
+
+    hideAllMapInfo();
+    showMapInfo(area);
+  });
+
+  area.addEventListener("mouseleave", () => {
+    if (fixedMapArea) return;
+
+    hideAllMapInfo();
+  });
+
+  area.addEventListener("click", (event) => {
+    event.stopPropagation();
+
+    if (fixedMapArea === area) {
+      fixedMapArea = null;
+      hideAllMapInfo();
+      return;
+    }
+
+    fixedMapArea = area;
+    hideAllMapInfo();
+    showMapInfo(area);
+  });
+});
+
+mapInfoBoxes.forEach((box) => {
+  box.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+});
+
+document.addEventListener("click", (event) => {
+  if (!mapWrap) return;
+
+  if (!mapWrap.contains(event.target)) {
+    fixedMapArea = null;
+    hideAllMapInfo();
+  }
+});
+
+// 책 미리보기 페이지 넘기기
 // 책 미리보기 페이지 넘기기
 const bookPreviewPages = [
   "./assets/images/preview01.jpg",
@@ -227,15 +297,24 @@ let bookPreviewIndex = 0;
 const bookPreviewImage = document.getElementById("bookPreviewImage");
 const bookPreviewPrev = document.querySelector(".book-preview-prev");
 const bookPreviewNext = document.querySelector(".book-preview-next");
+const bookPreviewDots = document.querySelectorAll(".book-preview-dot");
 
-function changeBookPreviewPage(direction) {
+function updateBookPreviewDots() {
+  bookPreviewDots.forEach((dot, index) => {
+    dot.classList.toggle("active", index === bookPreviewIndex);
+  });
+}
+
+function showBookPreviewPage(index) {
   if (!bookPreviewImage) return;
 
-  bookPreviewIndex += direction;
+  bookPreviewIndex = index;
 
   if (bookPreviewIndex < 0) {
     bookPreviewIndex = bookPreviewPages.length - 1;
-  } else if (bookPreviewIndex >= bookPreviewPages.length) {
+  }
+
+  if (bookPreviewIndex >= bookPreviewPages.length) {
     bookPreviewIndex = 0;
   }
 
@@ -244,7 +323,12 @@ function changeBookPreviewPage(direction) {
   setTimeout(() => {
     bookPreviewImage.src = bookPreviewPages[bookPreviewIndex];
     bookPreviewImage.style.opacity = 1;
+    updateBookPreviewDots();
   }, 150);
+}
+
+function changeBookPreviewPage(direction) {
+  showBookPreviewPage(bookPreviewIndex + direction);
 }
 
 if (bookPreviewPrev) {
@@ -258,3 +342,11 @@ if (bookPreviewNext) {
     changeBookPreviewPage(1);
   });
 }
+
+bookPreviewDots.forEach((dot, index) => {
+  dot.addEventListener("click", () => {
+    showBookPreviewPage(index);
+  });
+});
+
+updateBookPreviewDots();

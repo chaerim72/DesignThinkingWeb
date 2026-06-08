@@ -1,38 +1,61 @@
-// 2. 음량 조절 로직
 const masterSlider = document.getElementById("master-volume");
 const masterText = document.getElementById("master-value-text");
 
 const effectSlider = document.getElementById("effect-volume");
 const effectText = document.getElementById("effect-value-text");
 
-const setSliderBackground = (slider) => {
-  if (!slider) return;
-  slider.style.background = "#d9d9d9";
-};
+const darkModeToggle = document.getElementById("dark-mode-toggle");
 
-const getStoredVolume = (key, fallback) => {
+function getStoredVolume(key, fallback) {
   const value = localStorage.getItem(key);
   return value === null ? fallback : Number(value);
-};
+}
 
-window.addEventListener("DOMContentLoaded", () => {
-  const bgmVolume = getStoredVolume("bgmVolume", 85);
-  const sfxVolume = getStoredVolume("sfxVolume", 62);
+function setSliderBackground(slider) {
+  if (!slider) return;
 
-  if (masterSlider) {
+  const value =
+    ((Number(slider.value) - Number(slider.min)) /
+      (Number(slider.max) - Number(slider.min))) *
+    100;
+
+  const isDark = document.body.classList.contains("dark-mode");
+
+  if (isDark) {
+    slider.style.background = `linear-gradient(
+      to right,
+      #ffffff 0%,
+      #ffffff ${value}%,
+      transparent ${value}%,
+      transparent 100%
+    )`;
+  } else {
+    slider.style.background = `linear-gradient(
+      to right,
+      #000000 0%,
+      #000000 ${value}%,
+      #d9d9d9 ${value}%,
+      #d9d9d9 100%
+    )`;
+  }
+}
+
+function applyVolumes() {
+  if (masterSlider && masterText) {
+    const bgmVolume = getStoredVolume("bgmVolume", 30);
+
     masterSlider.value = bgmVolume;
     masterText.textContent = `${bgmVolume}%`;
     setSliderBackground(masterSlider);
   }
 
-  if (effectSlider) {
+  if (effectSlider && effectText) {
+    const sfxVolume = getStoredVolume("sfxVolume", 30);
+
     effectSlider.value = sfxVolume;
     effectText.textContent = `${sfxVolume}%`;
     setSliderBackground(effectSlider);
   }
-
-  localStorage.setItem("bgmVolume", bgmVolume);
-  localStorage.setItem("sfxVolume", sfxVolume);
 
   if (
     window.AudioManager &&
@@ -40,15 +63,46 @@ window.addEventListener("DOMContentLoaded", () => {
   ) {
     AudioManager.updateAllVolumes();
   }
+}
+
+function applyTheme() {
+  const isDark = localStorage.getItem("theme") === "dark";
+
+  document.body.classList.toggle("dark-mode", isDark);
+
+  if (darkModeToggle) {
+    darkModeToggle.checked = isDark;
+  }
+
+  setSliderBackground(masterSlider);
+  setSliderBackground(effectSlider);
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("bgmVolume") === null) {
+    localStorage.setItem("bgmVolume", 30);
+  }
+
+  if (localStorage.getItem("sfxVolume") === null) {
+    localStorage.setItem("sfxVolume", 30);
+  }
+
+  applyTheme();
+  applyVolumes();
 });
 
 if (masterSlider) {
-  setSliderBackground(masterSlider);
-  masterSlider.addEventListener("input", (e) => {
-    const val = e.target.value;
-    localStorage.setItem("bgmVolume", val);
-    if (masterText) masterText.innerText = val + "%";
+  masterSlider.addEventListener("input", (event) => {
+    const value = event.target.value;
+
+    localStorage.setItem("bgmVolume", value);
+
+    if (masterText) {
+      masterText.textContent = `${value}%`;
+    }
+
     setSliderBackground(masterSlider);
+
     if (
       window.AudioManager &&
       typeof AudioManager.updateAllVolumes === "function"
@@ -59,12 +113,17 @@ if (masterSlider) {
 }
 
 if (effectSlider) {
-  setSliderBackground(effectSlider);
-  effectSlider.addEventListener("input", (e) => {
-    const val = e.target.value;
-    localStorage.setItem("sfxVolume", val);
-    if (effectText) effectText.innerText = val + "%";
+  effectSlider.addEventListener("input", (event) => {
+    const value = event.target.value;
+
+    localStorage.setItem("sfxVolume", value);
+
+    if (effectText) {
+      effectText.textContent = `${value}%`;
+    }
+
     setSliderBackground(effectSlider);
+
     if (
       window.AudioManager &&
       typeof AudioManager.updateAllVolumes === "function"
@@ -74,47 +133,12 @@ if (effectSlider) {
   });
 }
 
-// 3. 다크모드 로직
-const toggleInput = document.getElementById("dark-mode-toggle");
+if (darkModeToggle) {
+  darkModeToggle.addEventListener("change", () => {
+    const isDark = darkModeToggle.checked;
 
-// 페이지 로드 시 상태 확인 및 초기화 (중복 제거)
-window.addEventListener("DOMContentLoaded", () => {
-  const isDark = localStorage.getItem("theme") === "dark";
-  if (isDark) document.body.classList.add("dark-mode");
-  if (toggleInput) toggleInput.checked = isDark;
-});
+    localStorage.setItem("theme", isDark ? "dark" : "light");
 
-if (toggleInput) {
-  toggleInput.addEventListener("change", () => {
-    document.body.classList.toggle("dark-mode");
-    const isDarkNow = document.body.classList.contains("dark-mode");
-    localStorage.setItem("theme", isDarkNow ? "dark" : "light");
-  });
-}
-
-// Optional 슬라이더들 (있을 때만 등록)
-const bgmSlider = document.getElementById("bgm-slider");
-if (bgmSlider) {
-  bgmSlider.addEventListener("input", (e) => {
-    localStorage.setItem("bgmVolume", e.target.value);
-    if (
-      window.AudioManager &&
-      typeof AudioManager.updateAllVolumes === "function"
-    ) {
-      AudioManager.updateAllVolumes();
-    }
-  });
-}
-
-const sfxSlider = document.getElementById("sfx-slider");
-if (sfxSlider) {
-  sfxSlider.addEventListener("input", (e) => {
-    localStorage.setItem("sfxVolume", e.target.value);
-    if (
-      window.AudioManager &&
-      typeof AudioManager.updateAllVolumes === "function"
-    ) {
-      AudioManager.updateAllVolumes();
-    }
+    applyTheme();
   });
 }
