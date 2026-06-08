@@ -108,8 +108,8 @@ function initAndStartGame() {
     const baseWidth = 35;
     const randomX = Math.random() * (gameCanvas.width - baseWidth);
     const randomType = Math.floor(Math.random() * trashImages.length);
-    const baseSpeed = 2.5 + gameLevel * 1.2;
-    const randomBonus = Math.random() * 2.5;
+    const baseSpeed = 4 + gameLevel * 4.5;
+    const randomBonus = Math.random() * 5;
 
     gameItems.push({
       x: randomX,
@@ -119,7 +119,7 @@ function initAndStartGame() {
       speed: baseSpeed + randomBonus,
       type: randomType,
     });
-  }, 1000);
+  }, 500);
 
   gameInterval2 = setInterval(() => {
     if (isGameOver || isGamePaused || !isFirstClickToStart) return;

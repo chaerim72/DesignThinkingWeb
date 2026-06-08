@@ -347,6 +347,12 @@ function togglePause() {
     if (screens.pause) {
       screens.pause.style.display = "flex";
     }
+
+    if (gameControlIcons) {
+      gameControlIcons.style.display = "flex";
+    }
+
+    updatePauseIcon();
   } else if (state === "PAUSED") {
     switchState("PLAYING");
 
@@ -362,6 +368,7 @@ function togglePause() {
       AudioManager.playBgm(trashUpBgmUrl);
     }
 
+    updatePauseIcon();
     update();
   }
 }
@@ -385,13 +392,29 @@ function updateSoundIcon() {
       : "../assets/images/사운드 아이콘on.png";
 }
 
+function updatePauseIcon() {
+  if (!pauseBtn) return;
+
+  pauseBtn.src =
+    state === "PAUSED"
+      ? "../assets/images/재생 아이콘.png"
+      : "../assets/images/정지 아이콘.png";
+}
+
 if (soundBtn) {
-  soundBtn.addEventListener("click", (e) => {
+  soundBtn.addEventListener("mousedown", (e) => {
+    e.preventDefault();
     e.stopPropagation();
 
     if (window.AudioManager) {
       AudioManager.toggleMute();
+
+      // 즉시 한 번, 상태 반영 후 한 번 더 업데이트
       updateSoundIcon();
+
+      setTimeout(() => {
+        updateSoundIcon();
+      }, 150);
     }
   });
 }
@@ -420,8 +443,10 @@ function restartGame() {
 }
 
 function handleGameClick(e) {
+  if (e.target.closest("#game-control-icons")) return;
+  if (e.target.closest("#sound-btn")) return;
+  if (e.target.closest("#pause-btn")) return;
   if (e.target.tagName && e.target.tagName.toLowerCase() === "button") return;
-  if (e.target.id === "pause-btn") return;
 
   if (state === "START") {
     startGame();
@@ -496,7 +521,8 @@ if (restartBtn) {
 }
 
 if (pauseBtn) {
-  pauseBtn.addEventListener("click", (e) => {
+  pauseBtn.addEventListener("mousedown", (e) => {
+    e.preventDefault();
     e.stopPropagation();
 
     if (window.AudioManager) {
@@ -504,6 +530,7 @@ if (pauseBtn) {
     }
 
     togglePause();
+    updatePauseIcon();
   });
 }
 
@@ -534,6 +561,7 @@ if (pauseBtn) {
 init();
 drawStartPreview();
 updateSoundIcon();
+updatePauseIcon();
 
 if (screens.start) {
   screens.start.style.display = "flex";
